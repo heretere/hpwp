@@ -1,0 +1,39 @@
+plugins {
+    id 'java-library'
+    id 'idea'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
+group 'com.github.heretere'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots' }
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    annotationProcessor 'org.spigotmc:plugin-annotations:1.2.3-SNAPSHOT'
+
+    compileOnlyApi 'org.jetbrains:annotations:20.1.0'
+    compileOnly 'org.spigotmc:plugin-annotations:1.2.3-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
+
+    implementation 'com.github.heretere:hdl:v1.1.0'
+    implementation('com.github.heretere:hch:v1.0.13') {
+        exclude group: 'org.tomlj', module: 'tomlj'
+    }
+}
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+shadowJar {
+    relocate 'com.heretere.hch', 'com.heretere.hpwp.libs.hch'
+    relocate 'com.heretere.hdl', 'com.heretere.hpwp.libs.hdl'
+    relocate 'org.antlr', 'com.heretere.hpwp.libs.antlr'
+    relocate 'org.tomlj', 'com.heretere.hpwp.libs.tomlj'
+}
