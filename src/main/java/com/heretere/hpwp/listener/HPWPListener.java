@@ -25,41 +25,9 @@
 
 package com.heretere.hpwp.listener;
 
-import com.heretere.hpwp.PerWorldPlugins;
-import com.heretere.hpwp.util.RegisteredListenerUtils;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventException;
 import org.bukkit.plugin.RegisteredListener;
 import org.jetbrains.annotations.NotNull;
 
-public final class HPWPRegisteredListener extends RegisteredListener implements HPWPListener {
-    private final @NotNull PerWorldPlugins parent;
-    private final @NotNull RegisteredListener delegate;
-
-    public HPWPRegisteredListener(
-        final @NotNull PerWorldPlugins parent,
-        final @NotNull RegisteredListener delegate
-    ) {
-        super(
-            delegate.getListener(),
-            RegisteredListenerUtils.getExecutorFromRegisteredListener(delegate)
-                                   .orElseThrow(IllegalArgumentException::new),
-            delegate.getPriority(),
-            delegate.getPlugin(),
-            delegate.isIgnoringCancelled()
-        );
-
-        this.parent = parent;
-        this.delegate = delegate;
-    }
-
-    @Override public void callEvent(final @NotNull Event event) throws EventException {
-        if (RegisteredListenerUtils.checkEnabled(this.parent, this, event)) {
-            this.delegate.callEvent(event);
-        }
-    }
-
-    @Override public @NotNull RegisteredListener getDelegate() {
-        return this.delegate;
-    }
+public interface HPWPListener {
+    @NotNull RegisteredListener getDelegate();
 }

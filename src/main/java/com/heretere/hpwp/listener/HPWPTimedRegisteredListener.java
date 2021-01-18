@@ -30,15 +30,16 @@ import com.heretere.hpwp.util.RegisteredListenerUtils;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.plugin.RegisteredListener;
+import org.bukkit.plugin.TimedRegisteredListener;
 import org.jetbrains.annotations.NotNull;
 
-public final class HPWPRegisteredListener extends RegisteredListener implements HPWPListener {
+public final class HPWPTimedRegisteredListener extends TimedRegisteredListener implements HPWPListener {
     private final @NotNull PerWorldPlugins parent;
-    private final @NotNull RegisteredListener delegate;
+    private final @NotNull TimedRegisteredListener delegate;
 
-    public HPWPRegisteredListener(
+    public HPWPTimedRegisteredListener(
         final @NotNull PerWorldPlugins parent,
-        final @NotNull RegisteredListener delegate
+        final @NotNull TimedRegisteredListener delegate
     ) {
         super(
             delegate.getListener(),

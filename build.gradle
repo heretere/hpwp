@@ -8,9 +8,11 @@ group 'com.github.heretere'
 version '1.0.0'
 
 repositories {
+    mavenLocal()
     mavenCentral()
-    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots' }
     maven { url 'https://jitpack.io' }
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots' }
+    maven { url 'https://repo.aikar.co/content/groups/aikar/' }
 }
 
 dependencies {
@@ -20,10 +22,11 @@ dependencies {
     compileOnly 'org.spigotmc:plugin-annotations:1.2.3-SNAPSHOT'
     compileOnly 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
 
-    implementation 'com.github.heretere:hdl:v1.1.0'
-    implementation('com.github.heretere:hch:v1.0.13') {
-        exclude group: 'org.tomlj', module: 'tomlj'
-    }
+    implementation 'com.heretere.hdl:hdl-spigot:1.4.3'
+    compileOnly 'com.github.heretere:hch:v1.1.0'
+
+    /* ACF */
+    implementation 'co.aikar:acf-paper:0.5.0-SNAPSHOT'
 }
 
 compileJava {
@@ -32,8 +35,11 @@ compileJava {
 }
 
 shadowJar {
+    archiveFileName = 'HPWP.jar'
     relocate 'com.heretere.hch', 'com.heretere.hpwp.libs.hch'
     relocate 'com.heretere.hdl', 'com.heretere.hpwp.libs.hdl'
-    relocate 'org.antlr', 'com.heretere.hpwp.libs.antlr'
-    relocate 'org.tomlj', 'com.heretere.hpwp.libs.tomlj'
+    relocate 'org.antlr', 'com.heretere.hpwp.libs.hdl.antlr'
+    relocate 'org.tomlj', 'com.heretere.hpwp.libs.hdl.tomlj'
+    relocate 'co.aikar.commands', 'com.heretere.hpwp.libs.acf'
+    relocate 'co.aikar.locales', 'com.heretere.hpwp.libs.acf.locales'
 }
