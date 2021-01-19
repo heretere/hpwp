@@ -25,6 +25,18 @@
 
 package com.heretere.hpwp;
 
+import java.net.MalformedURLException;
+import java.util.Objects;
+import java.util.Set;
+import java.util.logging.Level;
+
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.annotation.plugin.ApiVersion;
+import org.bukkit.plugin.java.annotation.plugin.LogPrefix;
+import org.bukkit.plugin.java.annotation.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.heretere.hdl.dependency.maven.annotation.MavenDependency;
 import com.heretere.hdl.dependency.maven.annotation.MavenRepository;
 import com.heretere.hdl.exception.DependencyLoadException;
@@ -34,19 +46,8 @@ import com.heretere.hpwp.commands.CommandManager;
 import com.heretere.hpwp.config.ConfigManager;
 import com.heretere.hpwp.injector.ListenerInjector;
 import com.heretere.hpwp.listener.CommandPreProcessListener;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.annotation.plugin.ApiVersion;
-import org.bukkit.plugin.java.annotation.plugin.LogPrefix;
-import org.bukkit.plugin.java.annotation.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.net.MalformedURLException;
-import java.util.Objects;
-import java.util.Set;
-import java.util.logging.Level;
-
-@Plugin(name = "HPWP", version = "1.0.0")
+@Plugin(name = "HPWP", version = "VERSION")
 @ApiVersion(ApiVersion.Target.v1_13)
 @LogPrefix("HPWP")
 
@@ -61,44 +62,55 @@ public final class PerWorldPlugins extends DependencyPlugin {
     private @Nullable ConfigManager configManager;
     private @Nullable ListenerInjector injector;
 
-    @Override protected void fail(
-        final @NotNull Set<@NotNull Throwable> set,
-        final @NotNull Set<@NotNull DependencyLoadException> set1
+    @Override
+    protected void fail(
+            final @NotNull Set<@NotNull Throwable> set,
+            final @NotNull Set<@NotNull DependencyLoadException> set1
     ) {
         if (!set1.isEmpty()) {
             super.getLogger()
-                 .severe("HPWP failed to download dependencies please download them from the link provided" +
-                             "below and place them in plugins/HPWP/dependencies/maven");
+                .severe(
+                    "HPWP failed to download dependencies please download them from the link provided"
+                        +
+                        "below and place them in plugins/HPWP/dependencies/maven"
+                );
 
-            set1.forEach(load -> super.getLogger()
-                                      .severe(() -> {
-                                          try {
-                                              return "Failed to download " + load.getDependency().getName() + "." +
-                                                  " Please download from "
-                                                  + load.getDependency()
-                                                        .getManualDownloadURL("https://repo1.maven.org/maven2/");
-                                          } catch (MalformedURLException e) {
-                                              e.printStackTrace();
-                                              return "";
-                                          }
-                                      }));
+            set1.forEach(
+                load -> super.getLogger()
+                    .severe(() -> {
+                        try {
+                            return String.format(
+                                "Failed to download '%s'. Please download from '%s' and place it in"
+                                    + "plugins/HPWP/dependencies/maven/",
+                                load.getDependency().getName(),
+                                "https://repo1.maven.org/maven2/" + load.getDependency().getManualDownloadURL()
+                            );
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                            return "";
+                        }
+                    })
+            );
         } else if (!set.isEmpty()) {
-            super.getLogger().severe("HPWP was unable to load dependencies. Please look at the errors below to" +
-                                         "determine the issue.");
+            super.getLogger().severe(
+                "HPWP was unable to load dependencies. Please look at the errors below to determine the issue."
+            );
             set.forEach(throwable -> super.getLogger().log(Level.SEVERE, throwable.getMessage(), throwable));
-            Bukkit.getPluginManager().disablePlugin(this);
         }
+        Bukkit.getPluginManager().disablePlugin(this);
     }
 
-    @Override public void load() {
+    @Override
+    public void load() {
         this.configManager = new ConfigManager(this);
         this.injector = new ListenerInjector(this);
     }
 
-    @Override public void enable() {
+    @Override
+    public void enable() {
         if (this.configManager == null || this.injector == null) {
             super.getLogger()
-                 .severe("HPWP Failed to start correctly.");
+                .severe("HPWP Failed to start correctly.");
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
@@ -116,7 +128,8 @@ public final class PerWorldPlugins extends DependencyPlugin {
         this.injector.load();
     }
 
-    @Override public void disable() {
+    @Override
+    public void disable() {
         if (this.configManager == null || this.injector == null) {
             return;
         }

@@ -25,6 +25,14 @@
 
 package com.heretere.hpwp.config;
 
+import java.io.IOException;
+import java.util.Map;
+import java.util.logging.Level;
+
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
+
 import com.google.common.collect.MapMaker;
 import com.heretere.hch.MultiConfigHandler;
 import com.heretere.hch.ProcessorType;
@@ -33,24 +41,16 @@ import com.heretere.hch.structure.annotation.Comment;
 import com.heretere.hch.structure.annotation.ConfigFile;
 import com.heretere.hch.structure.annotation.Key;
 import com.heretere.hpwp.PerWorldPlugins;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-import java.util.Map;
-import java.util.logging.Level;
 
 @ConfigFile("global.toml")
 public class ConfigManager {
-    @Key("messages.command_disabled_message")
-    @Comment("The message that is sent when a plugin's command is disabled in a world")
-    @Comment("Use '&' for color codes")
-    private String commandDisabledMessage = "&cSorry, that command is disabled.";
-
     private final @NotNull PerWorldPlugins parent;
     private final @NotNull MultiConfigHandler configHandler;
     private final @NotNull Map<@NotNull String, @NotNull ConfigWorld> worlds;
+    @Key("messages.command_disabled_message")
+    @Comment("The message that is sent when a plugin's command is disabled in a world")
+    @Comment("Use '&' for color codes")
+    private @NotNull String commandDisabledMessage = "&cSorry, that command is disabled.";
 
     public ConfigManager(final @NotNull PerWorldPlugins parent) {
         this.parent = parent;
@@ -99,7 +99,11 @@ public class ConfigManager {
         );
     }
 
-    public String getCommandDisabledMessage() {
+    public @NotNull String getCommandDisabledMessage() {
         return this.commandDisabledMessage;
+    }
+
+    public void setCommandDisabledMessage(final @NotNull String message) {
+        this.commandDisabledMessage = message;
     }
 }

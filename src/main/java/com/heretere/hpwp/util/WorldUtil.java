@@ -25,6 +25,8 @@
 
 package com.heretere.hpwp.util;
 
+import java.util.Optional;
+
 import org.bukkit.World;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockEvent;
@@ -35,8 +37,6 @@ import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.vehicle.VehicleEvent;
 import org.bukkit.event.weather.WeatherEvent;
 import org.bukkit.event.world.WorldEvent;
-
-import java.util.Optional;
 
 public final class WorldUtil {
     private WorldUtil() {

@@ -25,8 +25,9 @@
 
 package com.heretere.hpwp.util;
 
-import com.heretere.hpwp.PerWorldPlugins;
-import com.heretere.hpwp.listener.HPWPListener;
+import java.lang.reflect.Field;
+import java.util.Optional;
+
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.bukkit.World;
 import org.bukkit.event.Event;
@@ -34,8 +35,8 @@ import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.RegisteredListener;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
-import java.util.Optional;
+import com.heretere.hpwp.PerWorldPlugins;
+import com.heretere.hpwp.listener.HPWPListener;
 
 public final class RegisteredListenerUtils {
     private static final @NotNull Field EXECUTOR_FIELD =
@@ -46,7 +47,7 @@ public final class RegisteredListenerUtils {
     }
 
     public static @NotNull Optional<EventExecutor> getExecutorFromRegisteredListener(
-        final @NotNull RegisteredListener listener
+            final @NotNull RegisteredListener listener
     ) {
         try {
             return Optional.of((EventExecutor) EXECUTOR_FIELD.get(listener));
@@ -57,9 +58,9 @@ public final class RegisteredListenerUtils {
     }
 
     public static boolean checkEnabled(
-        final @NotNull PerWorldPlugins parent,
-        final @NotNull HPWPListener listener,
-        final @NotNull Event event
+            final @NotNull PerWorldPlugins parent,
+            final @NotNull HPWPListener listener,
+            final @NotNull Event event
     ) {
         if (!parent.isEnabled()) {
             return true;
@@ -69,13 +70,14 @@ public final class RegisteredListenerUtils {
 
         final Optional<World> world = WorldUtil.getWorldFromEvent(event);
 
-        return world.map(value ->
-                             parent.getConfigManager()
-                                   .getConfigFromWorld(value)
-                                   .eventEnabledForPlugin(
-                                       listener.getDelegate().getPlugin(),
-                                       event.getClass()
-                                   )).orElse(true);
+        return world.map(
+            value -> parent.getConfigManager()
+                .getConfigFromWorld(value)
+                .eventEnabledForPlugin(
+                    listener.getDelegate().getPlugin(),
+                    event.getClass()
+                )
+        ).orElse(true);
 
     }
 }

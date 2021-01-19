@@ -29,5 +29,6 @@ import org.bukkit.plugin.RegisteredListener;
 import org.jetbrains.annotations.NotNull;
 
 public interface HPWPListener {
-    @NotNull RegisteredListener getDelegate();
+    @NotNull
+    RegisteredListener getDelegate();
 }

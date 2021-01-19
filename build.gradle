@@ -1,11 +1,13 @@
 plugins {
-    id 'java-library'
-    id 'idea'
+    /* Beekeeper */
+    id 'io.beekeeper.gradle.plugins.dependency-updates' version '0.9.14'
+    id 'io.beekeeper.gradle.plugins.formatter' version '0.9.14'
+    id 'io.beekeeper.gradle.plugins.ide' version '0.9.14'
+    /* General */
     id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id 'java-library'
+    id 'checkstyle'
 }
-
-group 'com.github.heretere'
-version '1.0.0'
 
 repositories {
     mavenLocal()
@@ -15,21 +17,43 @@ repositories {
     maven { url 'https://repo.aikar.co/content/groups/aikar/' }
 }
 
+allprojects {
+    group 'com.heretere'
+    version '1.0.1'
+    description "Activate plugins in specific worlds."
+
+    tasks.withType(Checkstyle) {
+        reports {
+            xml.enabled false
+            html.enabled true
+        }
+    }
+}
+
 dependencies {
     annotationProcessor 'org.spigotmc:plugin-annotations:1.2.3-SNAPSHOT'
+    compileOnly 'org.spigotmc:plugin-annotations:1.2.3-SNAPSHOT'
 
     compileOnlyApi 'org.jetbrains:annotations:20.1.0'
-    compileOnly 'org.spigotmc:plugin-annotations:1.2.3-SNAPSHOT'
-    compileOnly 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
 
-    implementation 'com.heretere.hdl:hdl-spigot:1.4.3'
+    implementation 'com.heretere.hdl:hdl-spigot:1.5.0'
     compileOnly 'com.github.heretere:hch:v1.1.0'
 
     /* ACF */
     implementation 'co.aikar:acf-paper:0.5.0-SNAPSHOT'
 }
 
+task replaceSources(type: Sync) {
+    inputs.property 'version', version
+    from sourceSets.main.java
+    into "$buildDir/src"
+    filter { line -> line.replaceAll('VERSION', version) }
+}
+
 compileJava {
+    dependsOn spotlessApply
+    source = replaceSources.outputs
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }

@@ -25,12 +25,11 @@
 
 package com.heretere.hpwp.injector;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.MapMaker;
-import com.heretere.hpwp.PerWorldPlugins;
-import com.heretere.hpwp.listener.HPWPListener;
-import com.heretere.hpwp.listener.HPWPRegisteredListener;
-import com.heretere.hpwp.listener.HPWPTimedRegisteredListener;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -45,10 +44,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.MapMaker;
+import com.heretere.hpwp.PerWorldPlugins;
+import com.heretere.hpwp.listener.HPWPListener;
+import com.heretere.hpwp.listener.HPWPRegisteredListener;
+import com.heretere.hpwp.listener.HPWPTimedRegisteredListener;
 
 public final class ListenerInjector extends BukkitRunnable implements Listener {
     private static final long TICKS = 20L * 60L * 5L;
@@ -63,8 +64,8 @@ public final class ListenerInjector extends BukkitRunnable implements Listener {
     }
 
     public void registerEvent(
-        final @NotNull Plugin plugin,
-        final @NotNull Class<? extends Event> event
+            final @NotNull Plugin plugin,
+            final @NotNull Class<? extends Event> event
     ) {
         this.events
             .computeIfAbsent(plugin, p -> Collections.newSetFromMap(new MapMaker().weakKeys().makeMap()))
@@ -79,8 +80,10 @@ public final class ListenerInjector extends BukkitRunnable implements Listener {
 
         HandlerList.getHandlerLists().forEach(handlerList -> {
             for (RegisteredListener listener : handlerList.getRegisteredListeners()) {
-                if (listener.getPlugin() == this.parent
-                    || listener instanceof HPWPListener) {
+                if (
+                    listener.getPlugin() == this.parent
+                        || listener instanceof HPWPListener
+                ) {
                     continue;
                 }
 
@@ -90,20 +93,19 @@ public final class ListenerInjector extends BukkitRunnable implements Listener {
                     handlerList
                         .register(
                             listener instanceof TimedRegisteredListener
-                                ?
-                                new HPWPTimedRegisteredListener(
-                                    this.parent,
-                                    (TimedRegisteredListener) listener
+                                ? new HPWPTimedRegisteredListener(
+                                        this.parent,
+                                        (TimedRegisteredListener) listener
                                 )
                                 : new HPWPRegisteredListener(
-                                    this.parent,
-                                    listener
+                                        this.parent,
+                                        listener
                                 )
                         );
                 } catch (Exception e) {
                     handlerList.register(listener);
                     this.parent.getLogger()
-                               .severe(() -> "Failed to inject handler into " + listener.getPlugin() + ".");
+                        .severe(() -> "Failed to inject handler into " + listener.getPlugin() + ".");
                 }
             }
         });

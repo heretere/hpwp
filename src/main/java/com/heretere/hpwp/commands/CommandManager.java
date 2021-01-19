@@ -25,16 +25,18 @@
 
 package com.heretere.hpwp.commands;
 
-import co.aikar.commands.InvalidCommandArgument;
-import co.aikar.commands.PaperCommandManager;
-import com.heretere.hpwp.PerWorldPlugins;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import com.heretere.hpwp.PerWorldPlugins;
+
+import co.aikar.commands.InvalidCommandArgument;
+import co.aikar.commands.PaperCommandManager;
 
 public final class CommandManager {
     private final PerWorldPlugins parent;
@@ -63,19 +65,20 @@ public final class CommandManager {
                 final String pluginName = c.popFirstArg();
 
                 return Arrays.stream(Bukkit.getPluginManager().getPlugins())
-                             .filter(plugin -> StringUtils.equalsIgnoreCase(plugin.getName(), pluginName))
-                             .findAny()
-                             .orElseThrow(() -> new InvalidCommandArgument("Plugin with that name not found.", false));
+                    .filter(plugin -> StringUtils.equalsIgnoreCase(plugin.getName(), pluginName))
+                    .findAny()
+                    .orElseThrow(() -> new InvalidCommandArgument("Plugin with that name not found.", false));
             });
     }
 
     private void registerCommandCompletions() {
         this.manager
             .getCommandCompletions()
-            .registerAsyncCompletion("plugins", c ->
-                Arrays.stream(Bukkit.getPluginManager().getPlugins())
-                      .map(Plugin::getName)
-                      .collect(Collectors.toList())
+            .registerAsyncCompletion(
+                "plugins",
+                c -> Arrays.stream(Bukkit.getPluginManager().getPlugins())
+                    .map(Plugin::getName)
+                    .collect(Collectors.toList())
             );
     }
 }

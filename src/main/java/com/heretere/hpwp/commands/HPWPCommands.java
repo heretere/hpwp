@@ -25,6 +25,18 @@
 
 package com.heretere.hpwp.commands;
 
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.event.Event;
+import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+
+import com.google.common.collect.ImmutableSet;
+import com.heretere.hpwp.PerWorldPlugins;
+
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.CommandAlias;
@@ -34,22 +46,12 @@ import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.HelpCommand;
 import co.aikar.commands.annotation.Subcommand;
 import co.aikar.commands.annotation.Syntax;
-import com.google.common.collect.ImmutableSet;
-import com.heretere.hpwp.PerWorldPlugins;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.event.Event;
-import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @CommandAlias("hpwp|pwp")
 public final class HPWPCommands extends BaseCommand {
     @HelpCommand
     public static void onHelper(
-        final @NotNull CommandHelp helper
+            final @NotNull CommandHelp helper
     ) {
         helper.showHelp();
     }
@@ -60,18 +62,19 @@ public final class HPWPCommands extends BaseCommand {
     @CommandCompletion("@plugins")
     @Description("Lists all the events that have been ran by the specified plugin.")
     public static void onShowEvents(
-        final @NotNull PerWorldPlugins parent,
-        final @NotNull CommandSender sender,
-        final @NotNull Plugin plugin
+            final @NotNull PerWorldPlugins parent,
+            final @NotNull CommandSender sender,
+            final @NotNull Plugin plugin
     ) {
         final Optional<ImmutableSet<Class<? extends Event>>> events = parent.getInjector().getEventsForPlugin(plugin);
 
         if (events.isPresent()) {
-            sender.sendMessage("Events registered for that plugin: "
-                                   + events.get()
-                                           .stream()
-                                           .map(Class::getSimpleName)
-                                           .collect(Collectors.joining(", "))
+            sender.sendMessage(
+                "Events registered for that plugin: "
+                    + events.get()
+                        .stream()
+                        .map(Class::getSimpleName)
+                        .collect(Collectors.joining(", "))
             );
         } else {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "No events found for that plugin."));

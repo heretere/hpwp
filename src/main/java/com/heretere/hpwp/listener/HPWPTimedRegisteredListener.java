@@ -25,26 +25,27 @@
 
 package com.heretere.hpwp.listener;
 
-import com.heretere.hpwp.PerWorldPlugins;
-import com.heretere.hpwp.util.RegisteredListenerUtils;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.TimedRegisteredListener;
 import org.jetbrains.annotations.NotNull;
 
+import com.heretere.hpwp.PerWorldPlugins;
+import com.heretere.hpwp.util.RegisteredListenerUtils;
+
 public final class HPWPTimedRegisteredListener extends TimedRegisteredListener implements HPWPListener {
     private final @NotNull PerWorldPlugins parent;
     private final @NotNull TimedRegisteredListener delegate;
 
     public HPWPTimedRegisteredListener(
-        final @NotNull PerWorldPlugins parent,
-        final @NotNull TimedRegisteredListener delegate
+            final @NotNull PerWorldPlugins parent,
+            final @NotNull TimedRegisteredListener delegate
     ) {
         super(
             delegate.getListener(),
             RegisteredListenerUtils.getExecutorFromRegisteredListener(delegate)
-                                   .orElseThrow(IllegalArgumentException::new),
+                .orElseThrow(IllegalArgumentException::new),
             delegate.getPriority(),
             delegate.getPlugin(),
             delegate.isIgnoringCancelled()
@@ -54,13 +55,15 @@ public final class HPWPTimedRegisteredListener extends TimedRegisteredListener i
         this.delegate = delegate;
     }
 
-    @Override public void callEvent(final @NotNull Event event) throws EventException {
+    @Override
+    public void callEvent(final @NotNull Event event) throws EventException {
         if (RegisteredListenerUtils.checkEnabled(this.parent, this, event)) {
             this.delegate.callEvent(event);
         }
     }
 
-    @Override public @NotNull RegisteredListener getDelegate() {
+    @Override
+    public @NotNull RegisteredListener getDelegate() {
         return this.delegate;
     }
 }
