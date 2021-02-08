@@ -70,9 +70,8 @@ public final class PerWorldPlugins extends DependencyPlugin {
         if (!set1.isEmpty()) {
             super.getLogger()
                 .severe(
-                    "HPWP failed to download dependencies please download them from the link provided"
-                        +
-                        "below and place them in plugins/HPWP/dependencies/maven"
+                    "HPWP failed to download dependencies please download them from the links provided"
+                        + "below and place them in plugins/HPWP/dependencies/maven/"
                 );
 
             set1.forEach(

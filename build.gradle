@@ -4,13 +4,13 @@ plugins {
     id 'io.beekeeper.gradle.plugins.formatter' version '0.9.14'
     id 'io.beekeeper.gradle.plugins.ide' version '0.9.14'
     /* General */
+    id 'base'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
     id 'java-library'
     id 'checkstyle'
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
     maven { url 'https://jitpack.io' }
     maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots' }
