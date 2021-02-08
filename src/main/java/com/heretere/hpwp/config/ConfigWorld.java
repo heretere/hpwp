@@ -26,102 +26,34 @@
 package com.heretere.hpwp.config;
 
 import java.util.Collections;
-import java.util.logging.Level;
+import java.util.Set;
 
-import org.bukkit.World;
+import com.google.gson.annotations.SerializedName;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.common.collect.Maps;
-import com.heretere.hch.MultiConfigHandler;
-import com.heretere.hch.ProcessorType;
-import com.heretere.hch.collection.ConfigSet;
-import com.heretere.hch.structure.builder.ConfigBuilder;
-import com.heretere.hch.structure.builder.ConfigPathBuilder;
-import com.heretere.hpwp.PerWorldPlugins;
-import com.heretere.hpwp.util.YamlEscapeUtils;
 
 public final class ConfigWorld {
-    private @NotNull Boolean check = true;
-    private @NotNull ConfigSet<@NotNull String> whitelistedEvents;
-    private @NotNull ConfigSet<@NotNull String> disabledPlugins;
+    @SerializedName("check_world")
+    private @NotNull boolean check = true;
+    @SerializedName("whitelisted_events")
+    private @NotNull Set<@NotNull String> whitelistedEvents;
+    @SerializedName("disabled_plugins")
+    private @NotNull Set<@NotNull String> disabledPlugins;
 
-    ConfigWorld(
-            final @NotNull PerWorldPlugins parent,
-            final @NotNull MultiConfigHandler handler,
-            final @NotNull World world
-    ) {
-        this.whitelistedEvents = ConfigSet.newInstance(
-            String.class,
-            Collections.newSetFromMap(Maps.newTreeMap(String.CASE_INSENSITIVE_ORDER))
-        );
+    ConfigWorld() {
+        this.whitelistedEvents = Collections.newSetFromMap(Maps.newTreeMap(String.CASE_INSENSITIVE_ORDER));
 
         this.whitelistedEvents.add("PlayerJoinEvent");
         this.whitelistedEvents.add("PlayerQuitEvent");
         this.whitelistedEvents.add("PlayerKickEvent");
 
-        this.disabledPlugins = ConfigSet.newInstance(
-            String.class,
-            Collections.newSetFromMap(Maps.newTreeMap(String.CASE_INSENSITIVE_ORDER))
-        );
-
+        this.disabledPlugins = Collections.newSetFromMap(Maps.newTreeMap(String.CASE_INSENSITIVE_ORDER));
         this.disabledPlugins.add("Example Plugin 1");
         this.disabledPlugins.add("Example Plugin 2");
         this.disabledPlugins.add("Example Plugin 3");
-
-        this.createConfigSection(parent, handler, world);
-    }
-
-    @SuppressWarnings("unchecked")
-    private void createConfigSection(
-            final @NotNull PerWorldPlugins parent,
-            final @NotNull MultiConfigHandler handler,
-            final @NotNull World world
-    ) {
-        try {
-            final String worldKey = YamlEscapeUtils.escape(world.getName());
-            ConfigBuilder.builder()
-                .setRelativePath(world.getName() + ".toml")
-                .addConfigPath(
-                    ConfigPathBuilder
-                        .sectionBuilder()
-                        .addComment("Configuration for " + world.getName())
-                        .setKey(worldKey)
-                        .build()
-                )
-                .addConfigPath(
-                    ConfigPathBuilder
-                        .fieldBuilder(Boolean.class)
-                        .addComment("Enable per world plugins for this world?")
-                        .setKey(worldKey + ".check_world")
-                        .setGetterSupplier(() -> this.check)
-                        .setSetterConsumer(checkWorld -> this.check = checkWorld)
-                        .build()
-                )
-                .addConfigPath(
-                    ConfigPathBuilder
-                        .fieldBuilder(ConfigSet.class)
-                        .addComment("The events that run no matter what.")
-                        .setKey(worldKey + ".whitelisted_events")
-                        .setGetterSupplier(() -> this.whitelistedEvents)
-                        .setSetterConsumer(whitelist -> this.whitelistedEvents = whitelist)
-                        .build()
-                )
-                .addConfigPath(
-                    ConfigPathBuilder
-                        .fieldBuilder(ConfigSet.class)
-                        .addComment("The plugin's disabled in this world.")
-                        .setKey(worldKey + ".disabled_plugins")
-                        .setGetterSupplier(() -> this.disabledPlugins)
-                        .setSetterConsumer(disabled -> this.disabledPlugins = disabled)
-                        .build()
-                )
-                .build(handler, ProcessorType.TOML);
-        } catch (Exception e) {
-            parent.getLogger().log(Level.SEVERE, "Could not load config world", e);
-
-        }
     }
 
     public @NotNull Boolean getCheck() {
@@ -136,8 +68,8 @@ public final class ConfigWorld {
             return true;
         }
 
-        return !this.disabledPlugins.getBackingCollection().contains(plugin.getName())
-            || this.whitelistedEvents.getBackingCollection().contains(event.getSimpleName());
+        return !this.disabledPlugins.contains(plugin.getName())
+            || this.whitelistedEvents.contains(event.getSimpleName());
     }
 
     public boolean commandEnabledForPlugin(
@@ -147,7 +79,7 @@ public final class ConfigWorld {
             return true;
         }
 
-        return !this.disabledPlugins.getBackingCollection().contains(plugin.getName());
+        return !this.disabledPlugins.contains(plugin.getName());
     }
 
 }

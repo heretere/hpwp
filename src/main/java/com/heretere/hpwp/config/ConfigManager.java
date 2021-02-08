@@ -25,85 +25,85 @@
 
 package com.heretere.hpwp.config;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Level;
 
+import com.heretere.hch.yaml.YamlParser;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.common.collect.MapMaker;
-import com.heretere.hch.MultiConfigHandler;
-import com.heretere.hch.ProcessorType;
-import com.heretere.hch.processor.exception.InvalidTypeException;
-import com.heretere.hch.structure.annotation.Comment;
-import com.heretere.hch.structure.annotation.ConfigFile;
-import com.heretere.hch.structure.annotation.Key;
+import com.heretere.hch.core.MultiConfigHandler;
 import com.heretere.hpwp.PerWorldPlugins;
 
-@ConfigFile("global.toml")
 public class ConfigManager {
     private final @NotNull PerWorldPlugins parent;
     private final @NotNull MultiConfigHandler configHandler;
     private final @NotNull Map<@NotNull String, @NotNull ConfigWorld> worlds;
-    @Key("messages.command_disabled_message")
-    @Comment("The message that is sent when a plugin's command is disabled in a world")
-    @Comment("Use '&' for color codes")
-    private @NotNull String commandDisabledMessage = "&cSorry, that command is disabled.";
+    private final @NotNull GlobalVariables globalVariables;
 
     public ConfigManager(final @NotNull PerWorldPlugins parent) {
         this.parent = parent;
         this.configHandler = new MultiConfigHandler(parent.getDataFolder().toPath());
 
+        this.configHandler.registerFileExtensionHandler(new YamlParser(this.configHandler), "yml");
+
         this.worlds = new MapMaker()
             .initialCapacity(Bukkit.getWorlds().size())
             .weakKeys()
             .makeMap();
+
+        this.globalVariables = this.configHandler.loadPOJOClass(GlobalVariables.class)
+            .orElseThrow(() -> {
+                this.configHandler.getErrors()
+                    .forEach(error -> this.parent.getLogger().log(Level.SEVERE, error.getMessage(), error));
+                return new IllegalStateException("Couldn't load global yml.");
+            });
+
+        this.configHandler.getConfigByRelativePath("global.yml")
+            .ifPresent(config -> this.configHandler.saveConfig(config, true));
     }
 
     public void init() {
-        try {
-            this.configHandler.loadConfigClass(this, ProcessorType.TOML);
-        } catch (IllegalAccessException | InvalidTypeException | IOException e) {
-            this.parent.getLogger().log(Level.SEVERE, "Could not properly load config.", e);
-            Bukkit.getPluginManager().disablePlugin(this.parent);
-            return;
-        }
         Bukkit.getWorlds().forEach(this::getConfigFromWorld);
         this.save();
     }
 
-    public void load() {
-        try {
-            this.configHandler.load();
-        } catch (IllegalAccessException | InvalidTypeException | IOException e) {
-            this.parent.getLogger().log(Level.SEVERE, "Could not properly load config.", e);
-            Bukkit.getPluginManager().disablePlugin(this.parent);
-        }
-    }
-
     public void save() {
-        this.load();
-        try {
-            this.configHandler.unload();
-        } catch (IOException | IllegalAccessException e) {
-            e.printStackTrace();
+        if (!this.configHandler.saveAllConfigs(false)) {
+            this.parent.getLogger().severe("Failed to save config files.");
+
+            this.configHandler.getErrors()
+                .forEach(error -> this.parent.getLogger().log(Level.SEVERE, error.getMessage(), error));
         }
     }
 
     public @NotNull ConfigWorld getConfigFromWorld(final @NotNull World world) {
         return this.worlds.computeIfAbsent(
             world.getName(),
-            w -> new ConfigWorld(this.parent, this.configHandler, world)
+            w -> {
+                final ConfigWorld cfgWorld = this.configHandler
+                    .loadPOJOClassAtPath(world.getName() + ".yml", "", ConfigWorld.class)
+                    .orElseThrow(
+                        () -> {
+                            this.configHandler.getErrors()
+                                .forEach(error -> this.parent.getLogger().log(Level.SEVERE, error.getMessage(), error));
+                            return new IllegalStateException(
+                                    String.format("Couldn't probably load config for world '%s'.", world.getName())
+                            );
+                        }
+                    );
+
+                this.configHandler.getConfigByRelativePath(world.getName() + ".yml")
+                    .ifPresent(config -> this.configHandler.saveConfig(config, true));
+
+                return cfgWorld;
+            }
         );
     }
 
-    public @NotNull String getCommandDisabledMessage() {
-        return this.commandDisabledMessage;
-    }
-
-    public void setCommandDisabledMessage(final @NotNull String message) {
-        this.commandDisabledMessage = message;
+    public @NotNull GlobalVariables getGlobalVariables() {
+        return this.globalVariables;
     }
 }

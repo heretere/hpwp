@@ -25,7 +25,6 @@
 
 package com.heretere.hpwp;
 
-import java.net.MalformedURLException;
 import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Level;
@@ -38,7 +37,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.heretere.hdl.dependency.maven.annotation.MavenDependency;
-import com.heretere.hdl.dependency.maven.annotation.MavenRepository;
 import com.heretere.hdl.exception.DependencyLoadException;
 import com.heretere.hdl.relocation.annotation.Relocation;
 import com.heretere.hdl.spigot.DependencyPlugin;
@@ -51,13 +49,10 @@ import com.heretere.hpwp.listener.CommandPreProcessListener;
 @ApiVersion(ApiVersion.Target.v1_13)
 @LogPrefix("HPWP")
 
-@MavenRepository("https://jitpack.io")
-@MavenDependency("com|github|heretere:hch:v1.1.0")
 @MavenDependency("org|tomlj:tomlj:1.0.0")
 @MavenDependency("org|antlr:antlr4-runtime:4.7.2")
 @Relocation(from = "org|tomlj", to = "com|heretere|hpwp|libs|hdl|tomlj")
 @Relocation(from = "org|antlr", to = "com|heretere|hpwp|libs|hdl|antlr")
-@Relocation(from = "com|heretere|hch", to = "com|heretere|hpwp|libs|hch")
 public final class PerWorldPlugins extends DependencyPlugin {
     private @Nullable ConfigManager configManager;
     private @Nullable ListenerInjector injector;
@@ -77,17 +72,12 @@ public final class PerWorldPlugins extends DependencyPlugin {
             set1.forEach(
                 load -> super.getLogger()
                     .severe(() -> {
-                        try {
-                            return String.format(
-                                "Failed to download '%s'. Please download from '%s' and place it in"
-                                    + "plugins/HPWP/dependencies/maven/",
-                                load.getDependency().getName(),
-                                "https://repo1.maven.org/maven2/" + load.getDependency().getManualDownloadURL()
-                            );
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                            return "";
-                        }
+                        return String.format(
+                            "Failed to download '%s'. Please download from '%s' and place it in"
+                                + "plugins/HPWP/dependencies/maven/",
+                            load.getDependency().getName(),
+                            "https://repo1.maven.org/maven2/" + load.getDependency().getManualDownloadString()
+                        );
                     })
             );
         } else if (!set.isEmpty()) {

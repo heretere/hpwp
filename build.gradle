@@ -11,15 +11,15 @@ plugins {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
-    maven { url 'https://jitpack.io' }
     maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots' }
     maven { url 'https://repo.aikar.co/content/groups/aikar/' }
 }
 
 allprojects {
     group 'com.heretere'
-    version '1.0.1'
+    version '1.0.2'
     description "Activate plugins in specific worlds."
 
     tasks.withType(Checkstyle) {
@@ -37,8 +37,8 @@ dependencies {
     compileOnlyApi 'org.jetbrains:annotations:20.1.0'
     compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
 
-    implementation 'com.heretere.hdl:hdl-spigot:1.5.0'
-    compileOnly 'com.github.heretere:hch:v1.1.0'
+    implementation 'com.heretere.hdl:hdl-spigot:1.5.1'
+    implementation 'com.heretere.hch:hch-spigot-yaml:1.0.0'
 
     /* ACF */
     implementation 'co.aikar:acf-paper:0.5.0-SNAPSHOT'

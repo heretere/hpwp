@@ -114,7 +114,7 @@ public class CommandPreProcessListener implements Listener {
                 .sendMessage(
                     ChatColor.translateAlternateColorCodes(
                         '&',
-                        this.parent.getConfigManager().getCommandDisabledMessage()
+                        this.parent.getConfigManager().getGlobalVariables().getCommandDisabledMessage()
                     )
                 );
         }
