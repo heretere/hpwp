@@ -23,23 +23,15 @@
  *
  */
 
-package com.heretere.hpwp.config;
+package com.heretere.hpwp.gui;
 
-import com.heretere.hch.core.annotation.Comment;
-import com.heretere.hch.core.annotation.ConfigFile;
+import com.heretere.hpwp.PerWorldPlugins;
+import de.themoep.inventorygui.InventoryGui;
 import org.jetbrains.annotations.NotNull;
 
-@ConfigFile("global.yml")
-public class GlobalVariables {
-    @Comment("The message that is sent when someone tries to execute a disabled command.")
-    @Comment("Use the '&' symbol for color codes.")
-    private @NotNull String commandDisabledMessage = "&cSorry, that command is disabled.";
+public interface GuiPage {
+    void load(@NotNull PerWorldPlugins parent);
 
-    public @NotNull String getCommandDisabledMessage() {
-        return this.commandDisabledMessage;
-    }
-
-    public void setCommandDisabledMessage(final @NotNull String commandDisabledMessage) {
-        this.commandDisabledMessage = commandDisabledMessage;
-    }
+    @NotNull
+    InventoryGui getGUI();
 }

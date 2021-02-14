@@ -23,23 +23,28 @@
  *
  */
 
-package com.heretere.hpwp.config;
+package com.heretere.hpwp.gui;
 
-import com.heretere.hch.core.annotation.Comment;
-import com.heretere.hch.core.annotation.ConfigFile;
+import com.heretere.hpwp.PerWorldPlugins;
+import com.heretere.hpwp.gui.elements.MainMenu;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-@ConfigFile("global.yml")
-public class GlobalVariables {
-    @Comment("The message that is sent when someone tries to execute a disabled command.")
-    @Comment("Use the '&' symbol for color codes.")
-    private @NotNull String commandDisabledMessage = "&cSorry, that command is disabled.";
+public class GUI {
+    private final @NotNull PerWorldPlugins parent;
+    private final MainMenu mainMenu;
 
-    public @NotNull String getCommandDisabledMessage() {
-        return this.commandDisabledMessage;
+    public GUI(final @NotNull PerWorldPlugins parent) {
+        this.parent = parent;
+
+        this.mainMenu = new MainMenu();
     }
 
-    public void setCommandDisabledMessage(final @NotNull String commandDisabledMessage) {
-        this.commandDisabledMessage = commandDisabledMessage;
+    public void load() {
+        this.mainMenu.load(this.parent);
+    }
+
+    public void open(final @NotNull Player player) {
+        this.mainMenu.getGUI().show(player);
     }
 }

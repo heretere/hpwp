@@ -23,23 +23,17 @@
  *
  */
 
-package com.heretere.hpwp.config;
+package com.heretere.hpwp.util;
 
-import com.heretere.hch.core.annotation.Comment;
-import com.heretere.hch.core.annotation.ConfigFile;
+import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
-@ConfigFile("global.yml")
-public class GlobalVariables {
-    @Comment("The message that is sent when someone tries to execute a disabled command.")
-    @Comment("Use the '&' symbol for color codes.")
-    private @NotNull String commandDisabledMessage = "&cSorry, that command is disabled.";
-
-    public @NotNull String getCommandDisabledMessage() {
-        return this.commandDisabledMessage;
+public class ChatUtils {
+    private ChatUtils() {
+        throw new IllegalStateException("Utility Class.");
     }
 
-    public void setCommandDisabledMessage(final @NotNull String commandDisabledMessage) {
-        this.commandDisabledMessage = commandDisabledMessage;
+    public static String translate(final @NotNull String message) {
+        return ChatColor.translateAlternateColorCodes('&', message);
     }
 }

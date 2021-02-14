@@ -28,8 +28,10 @@ package com.heretere.hpwp.commands;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.heretere.hpwp.gui.GUI;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -79,5 +81,12 @@ public final class HPWPCommands extends BaseCommand {
         } else {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "No events found for that plugin."));
         }
+    }
+
+    @Subcommand("gui")
+    @CommandPermission("hpwp.gui")
+    @Description("Configure HPWP through the GUI")
+    public static void onShowGUI(GUI gui, Player sender) {
+        gui.open(sender);
     }
 }

@@ -28,13 +28,14 @@ package com.heretere.hpwp.config;
 import java.util.Map;
 import java.util.logging.Level;
 
-import com.heretere.hch.yaml.YamlParser;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.common.collect.MapMaker;
 import com.heretere.hch.core.MultiConfigHandler;
+import com.heretere.hch.spigot.SpigotSerializers;
+import com.heretere.hch.yaml.YamlParser;
 import com.heretere.hpwp.PerWorldPlugins;
 
 public class ConfigManager {
@@ -47,6 +48,7 @@ public class ConfigManager {
         this.parent = parent;
         this.configHandler = new MultiConfigHandler(parent.getDataFolder().toPath());
 
+        this.configHandler.registerTypeAdapters(SpigotSerializers.getDefaultSpigotSerializerAdapters());
         this.configHandler.registerFileExtensionHandler(new YamlParser(this.configHandler), "yml");
 
         this.worlds = new MapMaker()
@@ -63,20 +65,6 @@ public class ConfigManager {
 
         this.configHandler.getConfigByRelativePath("global.yml")
             .ifPresent(config -> this.configHandler.saveConfig(config, true));
-    }
-
-    public void init() {
-        Bukkit.getWorlds().forEach(this::getConfigFromWorld);
-        this.save();
-    }
-
-    public void save() {
-        if (!this.configHandler.saveAllConfigs(false)) {
-            this.parent.getLogger().severe("Failed to save config files.");
-
-            this.configHandler.getErrors()
-                .forEach(error -> this.parent.getLogger().log(Level.SEVERE, error.getMessage(), error));
-        }
     }
 
     public @NotNull ConfigWorld getConfigFromWorld(final @NotNull World world) {
@@ -105,5 +93,9 @@ public class ConfigManager {
 
     public @NotNull GlobalVariables getGlobalVariables() {
         return this.globalVariables;
+    }
+
+    public MultiConfigHandler getConfigHandler() {
+        return configHandler;
     }
 }

@@ -28,24 +28,34 @@ package com.heretere.hpwp.config;
 import java.util.Collections;
 import java.util.Set;
 
-import com.google.gson.annotations.SerializedName;
+import com.heretere.hch.core.annotation.Comment;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.common.collect.Maps;
+import com.google.gson.annotations.SerializedName;
 
 public final class ConfigWorld {
     @SerializedName("check_world")
-    private @NotNull boolean check = true;
+    @Comment("Check for disabled plugins in this world?")
+    private boolean check = true;
+    @SerializedName("disabled_plugins_use_whitelist")
+    @Comment("Set this to true if you want disabled_plugins to act as a whitelist.")
+    private boolean whitelist = false;
     @SerializedName("whitelisted_events")
+    @Comment("These events will run no matter what even if a plugin is disabled in a world.")
+    @Comment("The default ones are used for compatibility reasons only remove these if you are sure it's safe.")
     private @NotNull Set<@NotNull String> whitelistedEvents;
     @SerializedName("disabled_plugins")
+    @Comment("Define which plugins should be disabled.")
+    @Comment("The name should be the name of the plugin you see when it starts up.")
+    @Comment("or by using /plugins.")
     private @NotNull Set<@NotNull String> disabledPlugins;
 
     ConfigWorld() {
         this.whitelistedEvents = Collections.newSetFromMap(Maps.newTreeMap(String.CASE_INSENSITIVE_ORDER));
-
         this.whitelistedEvents.add("PlayerJoinEvent");
         this.whitelistedEvents.add("PlayerQuitEvent");
         this.whitelistedEvents.add("PlayerKickEvent");
@@ -56,8 +66,13 @@ public final class ConfigWorld {
         this.disabledPlugins.add("Example Plugin 3");
     }
 
-    public @NotNull Boolean getCheck() {
+    public boolean getCheck() {
         return this.check;
+    }
+
+    public boolean pluginEnabled(final @NotNull Plugin plugin) {
+        return StringUtils.equals(plugin.getName(), "HPWP")
+            || this.whitelist == this.disabledPlugins.contains(plugin.getName());
     }
 
     public boolean eventEnabledForPlugin(
@@ -68,8 +83,7 @@ public final class ConfigWorld {
             return true;
         }
 
-        return !this.disabledPlugins.contains(plugin.getName())
-            || this.whitelistedEvents.contains(event.getSimpleName());
+        return this.whitelistedEvents.contains(event.getSimpleName()) || this.pluginEnabled(plugin);
     }
 
     public boolean commandEnabledForPlugin(
@@ -79,7 +93,30 @@ public final class ConfigWorld {
             return true;
         }
 
-        return !this.disabledPlugins.contains(plugin.getName());
+        return this.pluginEnabled(plugin);
     }
 
+    public boolean isCheck() {
+        return check;
+    }
+
+    public boolean isWhitelist() {
+        return whitelist;
+    }
+
+    public void setCheck(boolean check) {
+        this.check = check;
+    }
+
+    public void setWhitelist(boolean whitelist) {
+        this.whitelist = whitelist;
+    }
+
+    public Set<String> getWhitelistedEvents() {
+        return whitelistedEvents;
+    }
+
+    public Set<String> getDisabledPlugins() {
+        return disabledPlugins;
+    }
 }

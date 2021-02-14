@@ -26,20 +26,24 @@
 package com.heretere.hpwp;
 
 import java.util.Objects;
-import java.util.Set;
 import java.util.logging.Level;
 
+import com.heretere.hpwp.gui.GUI;
 import org.bukkit.Bukkit;
+import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.PluginLoadOrder;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.annotation.permission.ChildPermission;
+import org.bukkit.plugin.java.annotation.permission.Permission;
 import org.bukkit.plugin.java.annotation.plugin.ApiVersion;
+import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 import org.bukkit.plugin.java.annotation.plugin.LogPrefix;
 import org.bukkit.plugin.java.annotation.plugin.Plugin;
+import org.bukkit.plugin.java.annotation.plugin.Website;
+import org.bukkit.plugin.java.annotation.plugin.author.Author;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.heretere.hdl.dependency.maven.annotation.MavenDependency;
-import com.heretere.hdl.exception.DependencyLoadException;
-import com.heretere.hdl.relocation.annotation.Relocation;
-import com.heretere.hdl.spigot.DependencyPlugin;
 import com.heretere.hpwp.commands.CommandManager;
 import com.heretere.hpwp.config.ConfigManager;
 import com.heretere.hpwp.injector.ListenerInjector;
@@ -48,61 +52,39 @@ import com.heretere.hpwp.listener.CommandPreProcessListener;
 @Plugin(name = "HPWP", version = "VERSION")
 @ApiVersion(ApiVersion.Target.v1_13)
 @LogPrefix("HPWP")
-
-@MavenDependency("org|tomlj:tomlj:1.0.0")
-@MavenDependency("org|antlr:antlr4-runtime:4.7.2")
-@Relocation(from = "org|tomlj", to = "com|heretere|hpwp|libs|hdl|tomlj")
-@Relocation(from = "org|antlr", to = "com|heretere|hpwp|libs|hdl|antlr")
-public final class PerWorldPlugins extends DependencyPlugin {
+@Author("Heretere")
+@Website("heretere.com")
+@LoadOrder(PluginLoadOrder.STARTUP)
+@Permission(name = "hpwp.events", desc = "Allows /pwp events", defaultValue = PermissionDefault.OP)
+@Permission(name = "hpwp.gui", desc = "Allows use of /pwp gui", defaultValue = PermissionDefault.OP)
+@Permission(
+    name = "hpwp.*",
+    desc = "Wildcard hpwp permission",
+    defaultValue = PermissionDefault.OP,
+    children = { @ChildPermission(name = "hpwp.events"), @ChildPermission(name = "hpwp.gui") }
+)
+public final class PerWorldPlugins extends JavaPlugin {
+    private @Nullable GUI gui;
     private @Nullable ConfigManager configManager;
     private @Nullable ListenerInjector injector;
 
     @Override
-    protected void fail(
-            final @NotNull Set<@NotNull Throwable> set,
-            final @NotNull Set<@NotNull DependencyLoadException> set1
-    ) {
-        if (!set1.isEmpty()) {
-            super.getLogger()
-                .severe(
-                    "HPWP failed to download dependencies please download them from the links provided"
-                        + "below and place them in plugins/HPWP/dependencies/maven/"
-                );
-
-            set1.forEach(
-                load -> super.getLogger()
-                    .severe(() -> {
-                        return String.format(
-                            "Failed to download '%s'. Please download from '%s' and place it in"
-                                + "plugins/HPWP/dependencies/maven/",
-                            load.getDependency().getName(),
-                            "https://repo1.maven.org/maven2/" + load.getDependency().getManualDownloadString()
-                        );
-                    })
-            );
-        } else if (!set.isEmpty()) {
-            super.getLogger().severe(
-                "HPWP was unable to load dependencies. Please look at the errors below to determine the issue."
-            );
-            set.forEach(throwable -> super.getLogger().log(Level.SEVERE, throwable.getMessage(), throwable));
-        }
-        Bukkit.getPluginManager().disablePlugin(this);
-    }
-
-    @Override
-    public void load() {
+    public void onLoad() {
+        this.gui = new GUI(this);
         this.configManager = new ConfigManager(this);
         this.injector = new ListenerInjector(this);
     }
 
     @Override
-    public void enable() {
-        if (this.configManager == null || this.injector == null) {
+    public void onEnable() {
+        if (this.gui == null || this.configManager == null || this.injector == null) {
             super.getLogger()
                 .severe("HPWP Failed to start correctly.");
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
+
+        this.gui.load();
 
         try {
             new CommandManager(this);
@@ -113,18 +95,20 @@ public final class PerWorldPlugins extends DependencyPlugin {
             return;
         }
 
-        this.configManager.init();
         this.injector.load();
     }
 
     @Override
-    public void disable() {
-        if (this.configManager == null || this.injector == null) {
+    public void onDisable() {
+        if (this.gui == null || this.configManager == null || this.injector == null) {
             return;
         }
 
-        this.configManager.save();
         this.injector.unload();
+    }
+
+    public @NotNull GUI getGui() {
+        return Objects.requireNonNull(this.gui);
     }
 
     public @NotNull ConfigManager getConfigManager() {

@@ -28,6 +28,7 @@ package com.heretere.hpwp.commands;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import com.heretere.hpwp.gui.GUI;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -58,6 +59,10 @@ public final class CommandManager {
         this.manager
             .getCommandContexts()
             .registerIssuerOnlyContext(PerWorldPlugins.class, c -> this.parent);
+
+        this.manager
+            .getCommandContexts()
+            .registerIssuerOnlyContext(GUI.class, c -> this.parent.getGui());
 
         this.manager
             .getCommandContexts()

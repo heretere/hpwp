@@ -23,23 +23,15 @@
  *
  */
 
-package com.heretere.hpwp.config;
+package com.heretere.hpwp.gui.elements.collection;
 
-import com.heretere.hch.core.annotation.Comment;
-import com.heretere.hch.core.annotation.ConfigFile;
-import org.jetbrains.annotations.NotNull;
+import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
-@ConfigFile("global.yml")
-public class GlobalVariables {
-    @Comment("The message that is sent when someone tries to execute a disabled command.")
-    @Comment("Use the '&' symbol for color codes.")
-    private @NotNull String commandDisabledMessage = "&cSorry, that command is disabled.";
+public class RandomSelector<T> extends ArrayList<T> {
 
-    public @NotNull String getCommandDisabledMessage() {
-        return this.commandDisabledMessage;
+    public T selectRandom() {
+        return this.get(ThreadLocalRandom.current().nextInt(super.size()));
     }
 
-    public void setCommandDisabledMessage(final @NotNull String commandDisabledMessage) {
-        this.commandDisabledMessage = commandDisabledMessage;
-    }
 }
