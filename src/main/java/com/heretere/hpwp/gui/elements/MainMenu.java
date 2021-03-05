@@ -33,6 +33,7 @@ import java.util.function.Predicate;
 import com.cryptomorin.xseries.XMaterial;
 import com.google.common.collect.MapMaker;
 import com.heretere.hpwp.gui.elements.collection.RandomSelector;
+import de.themoep.inventorygui.GuiPageElement;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -52,50 +53,51 @@ import static com.heretere.hpwp.util.ChatUtils.translate;
 public class MainMenu implements GuiPage {
     /* Static */
 
-    private static final String[] elements = {
+    private static final String[] ELEMENTS = {
         "    r    ",
         " wwwwwww ",
-        " fp   nl "
+        " fa   nl "
     };
 
-    private static final @NotNull RandomSelector<@NotNull Material> worldMaterials;
-    private static final @NotNull RandomSelector<@NotNull Material> netherMaterials;
-    private static final @NotNull RandomSelector<@NotNull Material> endMaterials;
-    private static final @NotNull Predicate<@NotNull Material> notAir = m -> !m.isAir();
+    private static final @NotNull RandomSelector<@NotNull Material> WORLD_MATERIALS;
+    private static final @NotNull RandomSelector<@NotNull Material> NETHER_MATERIALS;
+    private static final @NotNull RandomSelector<@NotNull Material> END_MATERIALS;
+    private static final @NotNull Predicate<@NotNull Material> NOT_AIR = m -> !m.isAir();
 
     static {
         /* Normal */
-        worldMaterials = new RandomSelector<>();
+        WORLD_MATERIALS = new RandomSelector<>();
 
-        Optional.ofNullable(XMaterial.GRASS_BLOCK.parseMaterial()).filter(notAir).ifPresent(worldMaterials::add);
-        Optional.ofNullable(XMaterial.DIRT.parseMaterial()).filter(notAir).ifPresent(worldMaterials::add);
-        Optional.ofNullable(XMaterial.SAND.parseMaterial()).filter(notAir).ifPresent(worldMaterials::add);
-        Optional.ofNullable(XMaterial.STONE.parseMaterial()).filter(notAir).ifPresent(worldMaterials::add);
-        Optional.ofNullable(XMaterial.GRAVEL.parseMaterial()).filter(notAir).ifPresent(worldMaterials::add);
+        Optional.ofNullable(XMaterial.GRASS_BLOCK.parseMaterial()).filter(NOT_AIR).ifPresent(WORLD_MATERIALS::add);
+        Optional.ofNullable(XMaterial.DIRT.parseMaterial()).filter(NOT_AIR).ifPresent(WORLD_MATERIALS::add);
+        Optional.ofNullable(XMaterial.SAND.parseMaterial()).filter(NOT_AIR).ifPresent(WORLD_MATERIALS::add);
+        Optional.ofNullable(XMaterial.STONE.parseMaterial()).filter(NOT_AIR).ifPresent(WORLD_MATERIALS::add);
+        Optional.ofNullable(XMaterial.GRAVEL.parseMaterial()).filter(NOT_AIR).ifPresent(WORLD_MATERIALS::add);
 
-        worldMaterials.trimToSize();
+        WORLD_MATERIALS.trimToSize();
 
         /* Nether */
 
-        netherMaterials = new RandomSelector<>();
+        NETHER_MATERIALS = new RandomSelector<>();
 
-        Optional.ofNullable(XMaterial.BASALT.parseMaterial()).filter(notAir).ifPresent(netherMaterials::add);
-        Optional.ofNullable(XMaterial.BLACKSTONE.parseMaterial()).filter(notAir).ifPresent(netherMaterials::add);
-        Optional.ofNullable(XMaterial.NETHER_BRICKS.parseMaterial()).filter(notAir).ifPresent(netherMaterials::add);
-        Optional.ofNullable(XMaterial.NETHERRACK.parseMaterial()).filter(notAir).ifPresent(netherMaterials::add);
-        Optional.ofNullable(XMaterial.GLOWSTONE.parseMaterial()).filter(notAir).ifPresent(netherMaterials::add);
-        Optional.ofNullable(XMaterial.SOUL_SAND.parseMaterial()).filter(notAir).ifPresent(netherMaterials::add);
-        Optional.ofNullable(XMaterial.MAGMA_BLOCK.parseMaterial()).filter(notAir).ifPresent(netherMaterials::add);
+        Optional.ofNullable(XMaterial.BASALT.parseMaterial()).filter(NOT_AIR).ifPresent(NETHER_MATERIALS::add);
+        Optional.ofNullable(XMaterial.BLACKSTONE.parseMaterial()).filter(NOT_AIR).ifPresent(NETHER_MATERIALS::add);
+        Optional.ofNullable(XMaterial.NETHER_BRICKS.parseMaterial()).filter(NOT_AIR).ifPresent(NETHER_MATERIALS::add);
+        Optional.ofNullable(XMaterial.NETHERRACK.parseMaterial()).filter(NOT_AIR).ifPresent(NETHER_MATERIALS::add);
+        Optional.ofNullable(XMaterial.GLOWSTONE.parseMaterial()).filter(NOT_AIR).ifPresent(NETHER_MATERIALS::add);
+        Optional.ofNullable(XMaterial.SOUL_SAND.parseMaterial()).filter(NOT_AIR).ifPresent(NETHER_MATERIALS::add);
+        Optional.ofNullable(XMaterial.MAGMA_BLOCK.parseMaterial()).filter(NOT_AIR).ifPresent(NETHER_MATERIALS::add);
 
-        netherMaterials.trimToSize();
+        NETHER_MATERIALS.trimToSize();
 
         /* End */
-        endMaterials = new RandomSelector<>();
+        END_MATERIALS = new RandomSelector<>();
 
-        Optional.ofNullable(XMaterial.END_STONE.parseMaterial()).filter(notAir).ifPresent(endMaterials::add);
-        Optional.ofNullable(XMaterial.END_STONE_BRICKS.parseMaterial()).filter(notAir).ifPresent(endMaterials::add);
+        Optional.ofNullable(XMaterial.END_STONE.parseMaterial()).filter(NOT_AIR).ifPresent(END_MATERIALS::add);
+        Optional.ofNullable(XMaterial.END_STONE_BRICKS.parseMaterial()).filter(NOT_AIR).ifPresent(END_MATERIALS::add);
+        Optional.ofNullable(XMaterial.PURPUR_BLOCK.parseMaterial()).filter(NOT_AIR).ifPresent(END_MATERIALS::add);
 
-        endMaterials.trimToSize();
+        END_MATERIALS.trimToSize();
     }
 
     /* Dynamic */
@@ -113,7 +115,7 @@ public class MainMenu implements GuiPage {
 
     @Override
     public void load(@NotNull PerWorldPlugins parent) {
-        this.gui = new InventoryGui(parent, "Main Menu", elements);
+        this.gui = new InventoryGui(parent, "Main Menu", ELEMENTS);
         this.gui.setFiller(new ItemStack(Objects.requireNonNull(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial()), 1));
         this.drawWorlds(parent);
 
@@ -133,6 +135,42 @@ public class MainMenu implements GuiPage {
         );
 
         this.gui.addElement(this.worlds);
+
+        gui.addElement(
+            new GuiPageElement(
+                    'f',
+                    new ItemStack(Objects.requireNonNull(XMaterial.PAPER.parseMaterial())),
+                    GuiPageElement.PageAction.FIRST,
+                    "Go to first page (current: %page%)"
+            )
+        );
+
+        gui.addElement(
+            new GuiPageElement(
+                    'a',
+                    new ItemStack(Objects.requireNonNull(XMaterial.OAK_SIGN.parseMaterial())),
+                    GuiPageElement.PageAction.PREVIOUS,
+                    "Go to previous page (%prevpage%)"
+            )
+        );
+
+        gui.addElement(
+            new GuiPageElement(
+                    'n',
+                    new ItemStack(Objects.requireNonNull(XMaterial.OAK_SIGN.parseMaterial())),
+                    GuiPageElement.PageAction.NEXT,
+                    "Go to next page (%nextpage%)"
+            )
+        );
+
+        gui.addElement(
+            new GuiPageElement(
+                    'l',
+                    new ItemStack(Objects.requireNonNull(XMaterial.PAPER.parseMaterial())),
+                    GuiPageElement.PageAction.LAST,
+                    "Go to last page (%pages%)"
+            )
+        );
     }
 
     @Override
@@ -140,7 +178,7 @@ public class MainMenu implements GuiPage {
         return Objects.requireNonNull(this.gui);
     }
 
-    private void drawWorlds(final @NotNull PerWorldPlugins parent) {
+    public void drawWorlds(final @NotNull PerWorldPlugins parent) {
         this.worlds = this.worlds == null ? new GuiElementGroup('w') : this.worlds;
         this.worlds.clearElements();
 
@@ -167,11 +205,11 @@ public class MainMenu implements GuiPage {
         switch (environment) {
             default:
             case NORMAL:
-                return MainMenu.worldMaterials.selectRandom();
+                return MainMenu.WORLD_MATERIALS.selectRandom();
             case NETHER:
-                return MainMenu.netherMaterials.selectRandom();
+                return MainMenu.NETHER_MATERIALS.selectRandom();
             case THE_END:
-                return MainMenu.endMaterials.selectRandom();
+                return MainMenu.END_MATERIALS.selectRandom();
         }
     }
 }

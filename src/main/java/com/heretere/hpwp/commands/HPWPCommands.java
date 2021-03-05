@@ -85,6 +85,7 @@ public final class HPWPCommands extends BaseCommand {
 
     @Subcommand("gui")
     @CommandPermission("hpwp.gui")
+    @Syntax("")
     @Description("Configure HPWP through the GUI")
     public static void onShowGUI(GUI gui, Player sender) {
         gui.open(sender);

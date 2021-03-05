@@ -20,7 +20,7 @@ repositories {
 
 allprojects {
     group 'com.heretere'
-    version '1.2.0'
+    version '1.2.2'
     description "Activate plugins in specific worlds."
 
     tasks.withType(Checkstyle) {

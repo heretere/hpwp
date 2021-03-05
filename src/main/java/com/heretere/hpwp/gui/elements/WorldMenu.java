@@ -51,7 +51,7 @@ import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
 
 public class WorldMenu implements GuiPage {
-    private static final String[] elements = {
+    private static final String[] ELEMENTS = {
         " tb r ed ",
         "         ",
         " ppppppp ",
@@ -60,10 +60,10 @@ public class WorldMenu implements GuiPage {
         " fa   nl "
     };
 
-    private static final @NotNull Material enabledMaterial = Objects.requireNonNull(
+    private static final @NotNull Material ENABLED_MATERIAL = Objects.requireNonNull(
         XMaterial.GREEN_STAINED_GLASS_PANE.parseMaterial()
     );
-    private static final @NotNull Material disabledMaterial = Objects.requireNonNull(
+    private static final @NotNull Material DISABLED_MATERIAL = Objects.requireNonNull(
         XMaterial.RED_STAINED_GLASS_PANE.parseMaterial()
     );
 
@@ -96,7 +96,7 @@ public class WorldMenu implements GuiPage {
 
     @Override
     public void load(final @NotNull PerWorldPlugins parent) {
-        this.gui = new InventoryGui(parent, this.name, elements);
+        this.gui = new InventoryGui(parent, this.name, ELEMENTS);
         this.gui.setFiller(new ItemStack(Objects.requireNonNull(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial()), 1));
         this.drawPlugins();
 
@@ -108,7 +108,7 @@ public class WorldMenu implements GuiPage {
                             this.saveConfig();
                         },
                         "enabled",
-                        new ItemStack(WorldMenu.enabledMaterial, 1),
+                        new ItemStack(WorldMenu.ENABLED_MATERIAL, 1),
                         translate("&aHPWP &eis currently &achecking this world."),
                         translate("&fClick to &edisable &fHPWP in this world.")
                 ),
@@ -118,7 +118,7 @@ public class WorldMenu implements GuiPage {
                             this.saveConfig();
                         },
                         "disabled",
-                        new ItemStack(WorldMenu.disabledMaterial, 1),
+                        new ItemStack(WorldMenu.DISABLED_MATERIAL, 1),
                         translate("&cHPWP is &enot currently &cchecking this worlld."),
                         translate("&fClick to &eenable &fHPWP in this world.")
                 )
@@ -145,7 +145,7 @@ public class WorldMenu implements GuiPage {
         this.gui.addElement(
             new StaticGuiElement(
                     'e',
-                    new ItemStack(WorldMenu.enabledMaterial, 1),
+                    new ItemStack(WorldMenu.ENABLED_MATERIAL, 1),
                     click -> {
                         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
                             if (this.configWorld.isWhitelist()) {
@@ -206,7 +206,7 @@ public class WorldMenu implements GuiPage {
         this.gui.addElement(
             new StaticGuiElement(
                     'd',
-                    new ItemStack(WorldMenu.disabledMaterial, 1),
+                    new ItemStack(WorldMenu.DISABLED_MATERIAL, 1),
                     click -> {
                         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
                             if (this.configWorld.isWhitelist()) {
@@ -291,7 +291,7 @@ public class WorldMenu implements GuiPage {
                                     this.saveConfig();
                                 },
                                 "pluginEnabled",
-                                new ItemStack(WorldMenu.enabledMaterial, 1),
+                                new ItemStack(WorldMenu.ENABLED_MATERIAL, 1),
                                 translate("&a" + plugin.getName()),
                                 translate("&cClick to disable &e" + plugin.getName() + " &cin this world.")
                         ),
@@ -306,7 +306,7 @@ public class WorldMenu implements GuiPage {
                                     this.saveConfig();
                                 },
                                 "pluginDisabled",
-                                new ItemStack(WorldMenu.disabledMaterial, 1),
+                                new ItemStack(WorldMenu.DISABLED_MATERIAL, 1),
                                 translate("&c" + plugin.getName()),
                                 translate("&aClick to enable &e" + plugin.getName() + " &ain this world.")
                         )

@@ -41,6 +41,7 @@ public class GUI {
     }
 
     public void load() {
+        this.mainMenu.drawWorlds(this.parent);
         this.mainMenu.load(this.parent);
     }
 

@@ -25,14 +25,13 @@
 
 package com.heretere.hpwp.config;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
-import com.google.common.collect.MapMaker;
 import com.heretere.hch.core.MultiConfigHandler;
 import com.heretere.hch.spigot.SpigotSerializers;
 import com.heretere.hch.yaml.YamlParser;
@@ -51,10 +50,7 @@ public class ConfigManager {
         this.configHandler.registerTypeAdapters(SpigotSerializers.getDefaultSpigotSerializerAdapters());
         this.configHandler.registerFileExtensionHandler(new YamlParser(this.configHandler), "yml");
 
-        this.worlds = new MapMaker()
-            .initialCapacity(Bukkit.getWorlds().size())
-            .weakKeys()
-            .makeMap();
+        this.worlds = new HashMap<>();
 
         this.globalVariables = this.configHandler.loadPOJOClass(GlobalVariables.class)
             .orElseThrow(() -> {
@@ -71,14 +67,21 @@ public class ConfigManager {
         return this.worlds.computeIfAbsent(
             world.getName(),
             w -> {
+                this.parent.getLogger().info(() -> "Loading config for " + world.getName() + ".");
                 final ConfigWorld cfgWorld = this.configHandler
                     .loadPOJOClassAtPath(world.getName() + ".yml", "", ConfigWorld.class)
                     .orElseThrow(
                         () -> {
                             this.configHandler.getErrors()
-                                .forEach(error -> this.parent.getLogger().log(Level.SEVERE, error.getMessage(), error));
+                                .forEach(
+                                    error -> this.parent.getLogger()
+                                        .log(Level.SEVERE, error.getMessage(), error)
+                                );
                             return new IllegalStateException(
-                                    String.format("Couldn't probably load config for world '%s'.", world.getName())
+                                    String.format(
+                                        "Couldn't probably load config for world '%s'.",
+                                        world.getName()
+                                    )
                             );
                         }
                     );
