@@ -41,11 +41,12 @@ public class GUI {
     }
 
     public void load() {
-        this.mainMenu.drawWorlds(this.parent);
         this.mainMenu.load(this.parent);
     }
 
     public void open(final @NotNull Player player) {
+        this.mainMenu.drawWorlds(this.parent);
         this.mainMenu.getGUI().show(player);
+        this.mainMenu.getGUI().draw(player);
     }
 }

@@ -25,28 +25,21 @@
 
 package com.heretere.hpwp.gui.elements;
 
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Predicate;
-
-import com.cryptomorin.xseries.XMaterial;
 import com.google.common.collect.MapMaker;
-import com.heretere.hpwp.gui.elements.collection.RandomSelector;
+import com.heretere.hpwp.PerWorldPlugins;
+import com.heretere.hpwp.gui.GuiPage;
+import com.heretere.hpwp.gui.Items;
+import de.themoep.inventorygui.GuiElementGroup;
 import de.themoep.inventorygui.GuiPageElement;
+import de.themoep.inventorygui.InventoryGui;
+import de.themoep.inventorygui.StaticGuiElement;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.heretere.hpwp.PerWorldPlugins;
-import com.heretere.hpwp.gui.GuiPage;
-
-import de.themoep.inventorygui.GuiElementGroup;
-import de.themoep.inventorygui.InventoryGui;
-import de.themoep.inventorygui.StaticGuiElement;
+import java.util.Map;
+import java.util.Objects;
 
 import static com.heretere.hpwp.util.ChatUtils.translate;
 
@@ -58,47 +51,6 @@ public class MainMenu implements GuiPage {
         " wwwwwww ",
         " fa   nl "
     };
-
-    private static final @NotNull RandomSelector<@NotNull Material> WORLD_MATERIALS;
-    private static final @NotNull RandomSelector<@NotNull Material> NETHER_MATERIALS;
-    private static final @NotNull RandomSelector<@NotNull Material> END_MATERIALS;
-    private static final @NotNull Predicate<@NotNull Material> NOT_AIR = m -> !m.isAir();
-
-    static {
-        /* Normal */
-        WORLD_MATERIALS = new RandomSelector<>();
-
-        Optional.ofNullable(XMaterial.GRASS_BLOCK.parseMaterial()).filter(NOT_AIR).ifPresent(WORLD_MATERIALS::add);
-        Optional.ofNullable(XMaterial.DIRT.parseMaterial()).filter(NOT_AIR).ifPresent(WORLD_MATERIALS::add);
-        Optional.ofNullable(XMaterial.SAND.parseMaterial()).filter(NOT_AIR).ifPresent(WORLD_MATERIALS::add);
-        Optional.ofNullable(XMaterial.STONE.parseMaterial()).filter(NOT_AIR).ifPresent(WORLD_MATERIALS::add);
-        Optional.ofNullable(XMaterial.GRAVEL.parseMaterial()).filter(NOT_AIR).ifPresent(WORLD_MATERIALS::add);
-
-        WORLD_MATERIALS.trimToSize();
-
-        /* Nether */
-
-        NETHER_MATERIALS = new RandomSelector<>();
-
-        Optional.ofNullable(XMaterial.BASALT.parseMaterial()).filter(NOT_AIR).ifPresent(NETHER_MATERIALS::add);
-        Optional.ofNullable(XMaterial.BLACKSTONE.parseMaterial()).filter(NOT_AIR).ifPresent(NETHER_MATERIALS::add);
-        Optional.ofNullable(XMaterial.NETHER_BRICKS.parseMaterial()).filter(NOT_AIR).ifPresent(NETHER_MATERIALS::add);
-        Optional.ofNullable(XMaterial.NETHERRACK.parseMaterial()).filter(NOT_AIR).ifPresent(NETHER_MATERIALS::add);
-        Optional.ofNullable(XMaterial.GLOWSTONE.parseMaterial()).filter(NOT_AIR).ifPresent(NETHER_MATERIALS::add);
-        Optional.ofNullable(XMaterial.SOUL_SAND.parseMaterial()).filter(NOT_AIR).ifPresent(NETHER_MATERIALS::add);
-        Optional.ofNullable(XMaterial.MAGMA_BLOCK.parseMaterial()).filter(NOT_AIR).ifPresent(NETHER_MATERIALS::add);
-
-        NETHER_MATERIALS.trimToSize();
-
-        /* End */
-        END_MATERIALS = new RandomSelector<>();
-
-        Optional.ofNullable(XMaterial.END_STONE.parseMaterial()).filter(NOT_AIR).ifPresent(END_MATERIALS::add);
-        Optional.ofNullable(XMaterial.END_STONE_BRICKS.parseMaterial()).filter(NOT_AIR).ifPresent(END_MATERIALS::add);
-        Optional.ofNullable(XMaterial.PURPUR_BLOCK.parseMaterial()).filter(NOT_AIR).ifPresent(END_MATERIALS::add);
-
-        END_MATERIALS.trimToSize();
-    }
 
     /* Dynamic */
 
@@ -116,13 +68,13 @@ public class MainMenu implements GuiPage {
     @Override
     public void load(@NotNull PerWorldPlugins parent) {
         this.gui = new InventoryGui(parent, "Main Menu", ELEMENTS);
-        this.gui.setFiller(new ItemStack(Objects.requireNonNull(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial()), 1));
+        this.gui.setFiller(Items.FILLER.getItem());
         this.drawWorlds(parent);
 
         this.gui.addElement(
             new StaticGuiElement(
                     'r',
-                    new ItemStack(Objects.requireNonNull(XMaterial.GREEN_STAINED_GLASS_PANE.parseMaterial())),
+                    Items.ENABLED.getItem(),
                     click -> {
                         this.drawWorlds(parent);
                         click.getGui().draw();
@@ -139,7 +91,7 @@ public class MainMenu implements GuiPage {
         gui.addElement(
             new GuiPageElement(
                     'f',
-                    new ItemStack(Objects.requireNonNull(XMaterial.PAPER.parseMaterial())),
+                    Items.PAPER.getItem(),
                     GuiPageElement.PageAction.FIRST,
                     "Go to first page (current: %page%)"
             )
@@ -148,7 +100,7 @@ public class MainMenu implements GuiPage {
         gui.addElement(
             new GuiPageElement(
                     'a',
-                    new ItemStack(Objects.requireNonNull(XMaterial.OAK_SIGN.parseMaterial())),
+                    Items.SIGN.getItem(),
                     GuiPageElement.PageAction.PREVIOUS,
                     "Go to previous page (%prevpage%)"
             )
@@ -157,7 +109,7 @@ public class MainMenu implements GuiPage {
         gui.addElement(
             new GuiPageElement(
                     'n',
-                    new ItemStack(Objects.requireNonNull(XMaterial.OAK_SIGN.parseMaterial())),
+                    Items.SIGN.getItem(),
                     GuiPageElement.PageAction.NEXT,
                     "Go to next page (%nextpage%)"
             )
@@ -166,7 +118,7 @@ public class MainMenu implements GuiPage {
         gui.addElement(
             new GuiPageElement(
                     'l',
-                    new ItemStack(Objects.requireNonNull(XMaterial.PAPER.parseMaterial())),
+                    Items.PAPER.getItem(),
                     GuiPageElement.PageAction.LAST,
                     "Go to last page (%pages%)"
             )
@@ -187,7 +139,8 @@ public class MainMenu implements GuiPage {
                 world -> this.worlds.addElement(
                     new StaticGuiElement(
                             'e',
-                            new ItemStack(MainMenu.getMaterialForEnvironment(world.getEnvironment())),
+                            Items.WorldMaterials.getWorldForEnvironment(world.getEnvironment())
+                                .selectRandom(),
                             click -> {
                                 this.worldMenus.computeIfAbsent(world, w -> new WorldMenu(parent, world))
                                     .getGUI()
@@ -199,17 +152,5 @@ public class MainMenu implements GuiPage {
                     )
                 )
             );
-    }
-
-    private static Material getMaterialForEnvironment(final @NotNull World.Environment environment) {
-        switch (environment) {
-            default:
-            case NORMAL:
-                return MainMenu.WORLD_MATERIALS.selectRandom();
-            case NETHER:
-                return MainMenu.NETHER_MATERIALS.selectRandom();
-            case THE_END:
-                return MainMenu.END_MATERIALS.selectRandom();
-        }
     }
 }

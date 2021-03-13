@@ -25,30 +25,26 @@
 
 package com.heretere.hpwp.gui.elements;
 
-import static com.heretere.hpwp.util.ChatUtils.translate;
-
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Objects;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import com.cryptomorin.xseries.XMaterial;
 import com.heretere.hpwp.PerWorldPlugins;
 import com.heretere.hpwp.config.ConfigWorld;
 import com.heretere.hpwp.gui.GuiPage;
-
+import com.heretere.hpwp.gui.Items;
 import de.themoep.inventorygui.GuiElementGroup;
 import de.themoep.inventorygui.GuiPageElement;
 import de.themoep.inventorygui.GuiStateElement;
 import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Objects;
+
+import static com.heretere.hpwp.util.ChatUtils.translate;
 
 public class WorldMenu implements GuiPage {
     private static final String[] ELEMENTS = {
@@ -59,13 +55,6 @@ public class WorldMenu implements GuiPage {
         " ppppppp ",
         " fa   nl "
     };
-
-    private static final @NotNull Material ENABLED_MATERIAL = Objects.requireNonNull(
-        XMaterial.GREEN_STAINED_GLASS_PANE.parseMaterial()
-    );
-    private static final @NotNull Material DISABLED_MATERIAL = Objects.requireNonNull(
-        XMaterial.RED_STAINED_GLASS_PANE.parseMaterial()
-    );
 
     private final @NotNull PerWorldPlugins parent;
 
@@ -97,7 +86,7 @@ public class WorldMenu implements GuiPage {
     @Override
     public void load(final @NotNull PerWorldPlugins parent) {
         this.gui = new InventoryGui(parent, this.name, ELEMENTS);
-        this.gui.setFiller(new ItemStack(Objects.requireNonNull(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial()), 1));
+        this.gui.setFiller(Items.FILLER.getItem());
         this.drawPlugins();
 
         GuiStateElement checkState = new GuiStateElement(
@@ -108,7 +97,7 @@ public class WorldMenu implements GuiPage {
                             this.saveConfig();
                         },
                         "enabled",
-                        new ItemStack(WorldMenu.ENABLED_MATERIAL, 1),
+                        Items.ENABLED.getItem(),
                         translate("&aHPWP &eis currently &achecking this world."),
                         translate("&fClick to &edisable &fHPWP in this world.")
                 ),
@@ -118,7 +107,7 @@ public class WorldMenu implements GuiPage {
                             this.saveConfig();
                         },
                         "disabled",
-                        new ItemStack(WorldMenu.DISABLED_MATERIAL, 1),
+                        Items.DISABLED.getItem(),
                         translate("&cHPWP is &enot currently &cchecking this worlld."),
                         translate("&fClick to &eenable &fHPWP in this world.")
                 )
@@ -130,7 +119,7 @@ public class WorldMenu implements GuiPage {
         this.gui.addElement(
             new StaticGuiElement(
                     'r',
-                    new ItemStack(Objects.requireNonNull(XMaterial.GREEN_STAINED_GLASS_PANE.parseMaterial())),
+                    Items.ENABLED.getItem(),
                     click -> {
                         this.drawPlugins();
                         click.getGui().draw();
@@ -145,7 +134,7 @@ public class WorldMenu implements GuiPage {
         this.gui.addElement(
             new StaticGuiElement(
                     'e',
-                    new ItemStack(WorldMenu.ENABLED_MATERIAL, 1),
+                    Items.ENABLED.getItem(),
                     click -> {
                         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
                             if (this.configWorld.isWhitelist()) {
@@ -178,7 +167,7 @@ public class WorldMenu implements GuiPage {
                             this.gui.draw();
                         },
                         "blacklist",
-                        new ItemStack(Objects.requireNonNull(XMaterial.BLACK_STAINED_GLASS_PANE.parseMaterial()), 1),
+                        Items.BLACKLIST.getItem(),
                         translate("&fBlackList"),
                         translate("&fClick to change to a &ewhitelist&f.")
                 ),
@@ -191,10 +180,7 @@ public class WorldMenu implements GuiPage {
                             this.gui.draw();
                         },
                         "whitelist",
-                        new ItemStack(
-                                Objects.requireNonNull(XMaterial.WHITE_STAINED_GLASS_PANE.parseMaterial()),
-                                1
-                        ),
+                        Items.WHITELIST.getItem(),
                         translate("&fWhitelist"),
                         translate("&fClick to change to a &eblacklist&f.")
                 )
@@ -206,7 +192,7 @@ public class WorldMenu implements GuiPage {
         this.gui.addElement(
             new StaticGuiElement(
                     'd',
-                    new ItemStack(WorldMenu.DISABLED_MATERIAL, 1),
+                    Items.DISABLED.getItem(),
                     click -> {
                         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
                             if (this.configWorld.isWhitelist()) {
@@ -233,7 +219,7 @@ public class WorldMenu implements GuiPage {
         gui.addElement(
             new GuiPageElement(
                     'f',
-                    new ItemStack(Objects.requireNonNull(XMaterial.PAPER.parseMaterial())),
+                    Items.PAPER.getItem(),
                     GuiPageElement.PageAction.FIRST,
                     "Go to first page (current: %page%)"
             )
@@ -242,7 +228,7 @@ public class WorldMenu implements GuiPage {
         gui.addElement(
             new GuiPageElement(
                     'a',
-                    new ItemStack(Objects.requireNonNull(XMaterial.OAK_SIGN.parseMaterial())),
+                    Items.SIGN.getItem(),
                     GuiPageElement.PageAction.PREVIOUS,
                     "Go to previous page (%prevpage%)"
             )
@@ -251,7 +237,7 @@ public class WorldMenu implements GuiPage {
         gui.addElement(
             new GuiPageElement(
                     'n',
-                    new ItemStack(Objects.requireNonNull(XMaterial.OAK_SIGN.parseMaterial())),
+                    Items.SIGN.getItem(),
                     GuiPageElement.PageAction.NEXT,
                     "Go to next page (%nextpage%)"
             )
@@ -260,7 +246,7 @@ public class WorldMenu implements GuiPage {
         gui.addElement(
             new GuiPageElement(
                     'l',
-                    new ItemStack(Objects.requireNonNull(XMaterial.PAPER.parseMaterial())),
+                    Items.PAPER.getItem(),
                     GuiPageElement.PageAction.LAST,
                     "Go to last page (%pages%)"
             )
@@ -291,7 +277,7 @@ public class WorldMenu implements GuiPage {
                                     this.saveConfig();
                                 },
                                 "pluginEnabled",
-                                new ItemStack(WorldMenu.ENABLED_MATERIAL, 1),
+                                Items.ENABLED.getItem(),
                                 translate("&a" + plugin.getName()),
                                 translate("&cClick to disable &e" + plugin.getName() + " &cin this world.")
                         ),
@@ -306,7 +292,7 @@ public class WorldMenu implements GuiPage {
                                     this.saveConfig();
                                 },
                                 "pluginDisabled",
-                                new ItemStack(WorldMenu.DISABLED_MATERIAL, 1),
+                                Items.ENABLED.getItem(),
                                 translate("&c" + plugin.getName()),
                                 translate("&aClick to enable &e" + plugin.getName() + " &ain this world.")
                         )
