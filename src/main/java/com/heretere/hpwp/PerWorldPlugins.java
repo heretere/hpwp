@@ -25,14 +25,17 @@
 
 package com.heretere.hpwp;
 
-import java.util.Objects;
-import java.util.logging.Level;
-
+import com.heretere.hpwp.chat.ChatTunnelListener;
+import com.heretere.hpwp.commands.CommandManager;
+import com.heretere.hpwp.config.ConfigManager;
 import com.heretere.hpwp.gui.GUI;
+import com.heretere.hpwp.injector.ListenerInjector;
+import com.heretere.hpwp.injector.listener.CommandPreProcessListener;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginLoadOrder;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.annotation.dependency.SoftDependency;
 import org.bukkit.plugin.java.annotation.permission.ChildPermission;
 import org.bukkit.plugin.java.annotation.permission.Permission;
 import org.bukkit.plugin.java.annotation.plugin.ApiVersion;
@@ -44,10 +47,8 @@ import org.bukkit.plugin.java.annotation.plugin.author.Author;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.heretere.hpwp.commands.CommandManager;
-import com.heretere.hpwp.config.ConfigManager;
-import com.heretere.hpwp.injector.ListenerInjector;
-import com.heretere.hpwp.listener.CommandPreProcessListener;
+import java.util.Objects;
+import java.util.logging.Level;
 
 @Plugin(name = "HPWP", version = "VERSION")
 @ApiVersion(ApiVersion.Target.v1_13)
@@ -58,11 +59,17 @@ import com.heretere.hpwp.listener.CommandPreProcessListener;
 @Permission(name = "hpwp.events", desc = "Allows /pwp events", defaultValue = PermissionDefault.OP)
 @Permission(name = "hpwp.gui", desc = "Allows use of /pwp gui", defaultValue = PermissionDefault.OP)
 @Permission(
+    name = "hpwp.chat.bypass",
+    desc = "See all chat tunnels no matter what",
+    defaultValue = PermissionDefault.FALSE
+)
+@Permission(
     name = "hpwp.*",
     desc = "Wildcard hpwp permission",
     defaultValue = PermissionDefault.OP,
     children = { @ChildPermission(name = "hpwp.events"), @ChildPermission(name = "hpwp.gui") }
 )
+@SoftDependency("ProtocolLib")
 public final class PerWorldPlugins extends JavaPlugin {
     private @Nullable GUI gui;
     private @Nullable ConfigManager configManager;
@@ -89,6 +96,7 @@ public final class PerWorldPlugins extends JavaPlugin {
         try {
             new CommandManager(this);
             Bukkit.getPluginManager().registerEvents(new CommandPreProcessListener(this), this);
+            Bukkit.getPluginManager().registerEvents(new ChatTunnelListener(this.configManager), this);
         } catch (IllegalAccessException e) {
             super.getLogger().log(Level.SEVERE, "Could not load command processor", e);
             Bukkit.getPluginManager().disablePlugin(this);

@@ -25,20 +25,6 @@
 
 package com.heretere.hpwp.commands;
 
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import com.heretere.hpwp.gui.GUI;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-
-import com.google.common.collect.ImmutableSet;
-import com.heretere.hpwp.PerWorldPlugins;
-
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.CommandAlias;
@@ -48,6 +34,18 @@ import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.HelpCommand;
 import co.aikar.commands.annotation.Subcommand;
 import co.aikar.commands.annotation.Syntax;
+import com.google.common.collect.ImmutableSet;
+import com.heretere.hpwp.PerWorldPlugins;
+import com.heretere.hpwp.gui.GUI;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @CommandAlias("hpwp|pwp")
 public final class HPWPCommands extends BaseCommand {

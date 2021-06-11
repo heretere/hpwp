@@ -26,7 +26,7 @@
 package com.heretere.hpwp.gui.elements;
 
 import com.heretere.hpwp.PerWorldPlugins;
-import com.heretere.hpwp.config.ConfigWorld;
+import com.heretere.hpwp.config.pojos.ConfigWorld;
 import com.heretere.hpwp.gui.GuiPage;
 import com.heretere.hpwp.gui.Items;
 import de.themoep.inventorygui.GuiElementGroup;
@@ -108,7 +108,7 @@ public class WorldMenu implements GuiPage {
                         },
                         "disabled",
                         Items.DISABLED.getItem(),
-                        translate("&cHPWP is &enot currently &cchecking this worlld."),
+                        translate("&cHPWP is &enot currently &cchecking this world."),
                         translate("&fClick to &eenable &fHPWP in this world.")
                 )
         );
@@ -292,7 +292,7 @@ public class WorldMenu implements GuiPage {
                                     this.saveConfig();
                                 },
                                 "pluginDisabled",
-                                Items.ENABLED.getItem(),
+                                Items.DISABLED.getItem(),
                                 translate("&c" + plugin.getName()),
                                 translate("&aClick to enable &e" + plugin.getName() + " &ain this world.")
                         )

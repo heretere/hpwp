@@ -23,31 +23,39 @@
  *
  */
 
-package com.heretere.hpwp.config;
+package com.heretere.hpwp.config.pojos;
 
-import java.util.Collections;
-import java.util.Set;
-
+import com.google.common.collect.Maps;
+import com.google.gson.annotations.SerializedName;
 import com.heretere.hch.core.annotation.Comment;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-import com.google.common.collect.Maps;
-import com.google.gson.annotations.SerializedName;
+import java.util.Collections;
+import java.util.Set;
 
 public final class ConfigWorld {
+
     @SerializedName("check_world")
     @Comment("Check for disabled plugins in this world?")
     private boolean check = true;
+
+    @SerializedName("chat_tunnel_id")
+    @Comment("The id of the chat tunnel this world is in.")
+    @Comment("Used to show chat messages depending on the world.")
+    private String chatTunnelId = "tunnel-1";
+
     @SerializedName("disabled_plugins_use_whitelist")
     @Comment("Set this to true if you want disabled_plugins to act as a whitelist.")
     private boolean whitelist = false;
+
     @SerializedName("whitelisted_events")
     @Comment("These events will run no matter what even if a plugin is disabled in a world.")
     @Comment("The default ones are used for compatibility reasons only remove these if you are sure it's safe.")
     private @NotNull Set<@NotNull String> whitelistedEvents;
+
     @SerializedName("disabled_plugins")
     @Comment("Define which plugins should be disabled.")
     @Comment("The name should be the name of the plugin you see when it starts up.")
@@ -94,6 +102,10 @@ public final class ConfigWorld {
         }
 
         return this.pluginEnabled(plugin);
+    }
+
+    public String getChatTunnelId() {
+        return chatTunnelId;
     }
 
     public boolean isCheck() {

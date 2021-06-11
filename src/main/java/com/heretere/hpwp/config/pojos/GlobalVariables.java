@@ -23,7 +23,7 @@
  *
  */
 
-package com.heretere.hpwp.config;
+package com.heretere.hpwp.config.pojos;
 
 import com.heretere.hch.core.annotation.Comment;
 import com.heretere.hch.core.annotation.ConfigFile;

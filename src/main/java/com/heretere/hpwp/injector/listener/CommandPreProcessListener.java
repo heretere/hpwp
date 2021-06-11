@@ -23,7 +23,7 @@
  *
  */
 
-package com.heretere.hpwp.listener;
+package com.heretere.hpwp.injector.listener;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -46,7 +46,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.Maps;
 import com.heretere.hpwp.PerWorldPlugins;
-import com.heretere.hpwp.config.ConfigWorld;
+import com.heretere.hpwp.config.pojos.ConfigWorld;
 
 public class CommandPreProcessListener implements Listener {
     private static final Field COMMAND_MAP = FieldUtils.getField(Bukkit.getServer().getClass(), "commandMap", true);

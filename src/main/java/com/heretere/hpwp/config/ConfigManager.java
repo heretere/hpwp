@@ -25,30 +25,35 @@
 
 package com.heretere.hpwp.config;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-
+import com.heretere.hch.core.MultiConfigHandler;
+import com.heretere.hch.yaml.YamlParser;
+import com.heretere.hpwp.PerWorldPlugins;
+import com.heretere.hpwp.config.pojos.ConfigWorld;
+import com.heretere.hpwp.config.pojos.GlobalVariables;
+import com.heretere.hpwp.config.pojos.tunnels.ChatTunnelsConfig;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
-import com.heretere.hch.core.MultiConfigHandler;
-import com.heretere.hch.spigot.SpigotSerializers;
-import com.heretere.hch.yaml.YamlParser;
-import com.heretere.hpwp.PerWorldPlugins;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
 
 public class ConfigManager {
     private final @NotNull PerWorldPlugins parent;
     private final @NotNull MultiConfigHandler configHandler;
     private final @NotNull Map<@NotNull String, @NotNull ConfigWorld> worlds;
     private final @NotNull GlobalVariables globalVariables;
+    private final @NotNull ChatTunnelsConfig chatTunnelsConfig;
 
     public ConfigManager(final @NotNull PerWorldPlugins parent) {
         this.parent = parent;
         this.configHandler = new MultiConfigHandler(parent.getDataFolder().toPath());
 
-        this.configHandler.registerTypeAdapters(SpigotSerializers.getDefaultSpigotSerializerAdapters());
         this.configHandler.registerFileExtensionHandler(new YamlParser(this.configHandler), "yml");
+
+        Map<Class<?>, Object> typeAdapters = new HashMap<>();
+
+        this.configHandler.registerTypeAdapters(typeAdapters);
 
         this.worlds = new HashMap<>();
 
@@ -59,8 +64,20 @@ public class ConfigManager {
                 return new IllegalStateException("Couldn't load global yml.");
             });
 
+        this.chatTunnelsConfig = this.configHandler.loadPOJOClass(ChatTunnelsConfig.class)
+            .orElseThrow(() -> {
+                this.configHandler.getErrors()
+                    .forEach(error -> this.parent.getLogger().log(Level.SEVERE, error.getMessage(), error));
+                return new IllegalStateException("Couldn't load chat tunnels yml.");
+            });
+
         this.configHandler.getConfigByRelativePath("global.yml")
             .ifPresent(config -> this.configHandler.saveConfig(config, true));
+
+        this.configHandler.getConfigByRelativePath("chat_tunnels.yml")
+            .ifPresent(config -> this.configHandler.saveConfig(config, true));
+
+        this.configHandler.getErrors().forEach(Throwable::printStackTrace);
     }
 
     public @NotNull ConfigWorld getConfigFromWorld(final @NotNull World world) {
@@ -100,5 +117,9 @@ public class ConfigManager {
 
     public MultiConfigHandler getConfigHandler() {
         return configHandler;
+    }
+
+    public ChatTunnelsConfig getChatTunnelsConfig() {
+        return chatTunnelsConfig;
     }
 }
