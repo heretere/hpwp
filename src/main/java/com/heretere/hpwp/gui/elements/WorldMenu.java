@@ -25,31 +25,33 @@
 
 package com.heretere.hpwp.gui.elements;
 
-import com.heretere.hpwp.PerWorldPlugins;
-import com.heretere.hpwp.config.pojos.ConfigWorld;
-import com.heretere.hpwp.gui.GuiPage;
-import com.heretere.hpwp.gui.Items;
-import de.themoep.inventorygui.GuiElementGroup;
-import de.themoep.inventorygui.GuiPageElement;
-import de.themoep.inventorygui.GuiStateElement;
-import de.themoep.inventorygui.InventoryGui;
-import de.themoep.inventorygui.StaticGuiElement;
+import static com.heretere.hpwp.util.ChatUtils.translate;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Objects;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Objects;
+import com.heretere.hpwp.PerWorldPlugins;
+import com.heretere.hpwp.config.pojos.ConfigWorld;
+import com.heretere.hpwp.gui.GuiPage;
+import com.heretere.hpwp.gui.Items;
 
-import static com.heretere.hpwp.util.ChatUtils.translate;
+import de.themoep.inventorygui.GuiElementGroup;
+import de.themoep.inventorygui.GuiPageElement;
+import de.themoep.inventorygui.GuiStateElement;
+import de.themoep.inventorygui.InventoryGui;
+import de.themoep.inventorygui.StaticGuiElement;
 
 public class WorldMenu implements GuiPage {
     private static final String[] ELEMENTS = {
         " tb r ed ",
-        "         ",
+        "    c    ",
         " ppppppp ",
         " ppppppp ",
         " ppppppp ",
@@ -86,6 +88,7 @@ public class WorldMenu implements GuiPage {
     @Override
     public void load(final @NotNull PerWorldPlugins parent) {
         this.gui = new InventoryGui(parent, this.name, ELEMENTS);
+        this.gui.setCloseAction(close -> false);
         this.gui.setFiller(Items.FILLER.getItem());
         this.drawPlugins();
 

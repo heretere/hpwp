@@ -1,12 +1,13 @@
 package com.heretere.hpwp.gui;
 
-import com.cryptomorin.xseries.XMaterial;
-import com.heretere.hpwp.gui.elements.collection.RandomSelector;
+import java.util.Arrays;
+import java.util.Objects;
+
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
-import java.util.Objects;
+import com.cryptomorin.xseries.XMaterial;
+import com.heretere.hpwp.gui.elements.collection.RandomSelector;
 
 public enum Items {
     ENABLED(XMaterial.GREEN_STAINED_GLASS_PANE.parseItem()),
@@ -68,7 +69,7 @@ public enum Items {
             Arrays.stream(xMaterials)
                 .map(XMaterial::parseItem)
                 .filter(Objects::nonNull)
-                .filter(i -> !i.getType().isAir())
+                .filter(i -> i.getType().isBlock())
                 .forEach(this.items::add);
         }
 

@@ -25,23 +25,25 @@
 
 package com.heretere.hpwp.gui.elements;
 
-import com.google.common.collect.MapMaker;
-import com.heretere.hpwp.PerWorldPlugins;
-import com.heretere.hpwp.gui.GuiPage;
-import com.heretere.hpwp.gui.Items;
-import de.themoep.inventorygui.GuiElementGroup;
-import de.themoep.inventorygui.GuiPageElement;
-import de.themoep.inventorygui.InventoryGui;
-import de.themoep.inventorygui.StaticGuiElement;
+import static com.heretere.hpwp.util.ChatUtils.translate;
+
+import java.util.Map;
+import java.util.Objects;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
-import java.util.Objects;
+import com.google.common.collect.MapMaker;
+import com.heretere.hpwp.PerWorldPlugins;
+import com.heretere.hpwp.gui.GuiPage;
+import com.heretere.hpwp.gui.Items;
 
-import static com.heretere.hpwp.util.ChatUtils.translate;
+import de.themoep.inventorygui.GuiElementGroup;
+import de.themoep.inventorygui.GuiPageElement;
+import de.themoep.inventorygui.InventoryGui;
+import de.themoep.inventorygui.StaticGuiElement;
 
 public class MainMenu implements GuiPage {
     /* Static */
@@ -68,6 +70,7 @@ public class MainMenu implements GuiPage {
     @Override
     public void load(@NotNull PerWorldPlugins parent) {
         this.gui = new InventoryGui(parent, "Main Menu", ELEMENTS);
+        this.gui.setCloseAction(close -> false);
         this.gui.setFiller(Items.FILLER.getItem());
         this.drawWorlds(parent);
 
@@ -147,7 +150,7 @@ public class MainMenu implements GuiPage {
                                     .show(click.getWhoClicked());
                                 return true;
                             },
-                            world.getName(),
+                            translate("&r&f" + world.getName()),
                             translate("&eConfigure the plugins for this world.")
                     )
                 )
