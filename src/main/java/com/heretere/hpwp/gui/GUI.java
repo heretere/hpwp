@@ -26,27 +26,27 @@
 package com.heretere.hpwp.gui;
 
 import com.heretere.hpwp.PerWorldPlugins;
-import com.heretere.hpwp.gui.elements.MainMenu;
+import com.heretere.hpwp.gui.elements.WorldSelectorMenu;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class GUI {
     private final @NotNull PerWorldPlugins parent;
-    private final MainMenu mainMenu;
+    private final WorldSelectorMenu worldSelectorMenu;
 
     public GUI(final @NotNull PerWorldPlugins parent) {
         this.parent = parent;
 
-        this.mainMenu = new MainMenu();
+        this.worldSelectorMenu = new WorldSelectorMenu();
     }
 
     public void load() {
-        this.mainMenu.load(this.parent);
+        this.worldSelectorMenu.load(this.parent);
     }
 
     public void open(final @NotNull Player player) {
-        this.mainMenu.drawWorlds(this.parent);
-        this.mainMenu.getGUI().show(player);
-        this.mainMenu.getGUI().draw(player);
+        this.worldSelectorMenu.drawWorlds(this.parent);
+        this.worldSelectorMenu.getGUI().show(player);
+        this.worldSelectorMenu.getGUI().draw(player);
     }
 }

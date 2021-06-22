@@ -25,17 +25,15 @@
 
 package com.heretere.hpwp;
 
-import com.heretere.hpwp.chat.ChatTunnelListener;
-import com.heretere.hpwp.commands.CommandManager;
-import com.heretere.hpwp.config.ConfigManager;
-import com.heretere.hpwp.gui.GUI;
-import com.heretere.hpwp.injector.ListenerInjector;
-import com.heretere.hpwp.injector.listener.CommandPreProcessListener;
+import java.util.Objects;
+import java.util.logging.Level;
+
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginLoadOrder;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.annotation.dependency.SoftDependency;
 import org.bukkit.plugin.java.annotation.permission.ChildPermission;
 import org.bukkit.plugin.java.annotation.permission.Permission;
 import org.bukkit.plugin.java.annotation.plugin.ApiVersion;
@@ -47,8 +45,12 @@ import org.bukkit.plugin.java.annotation.plugin.author.Author;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-import java.util.logging.Level;
+import com.heretere.hpwp.chat.ChatTunnelListener;
+import com.heretere.hpwp.commands.CommandManager;
+import com.heretere.hpwp.config.ConfigManager;
+import com.heretere.hpwp.gui.GUI;
+import com.heretere.hpwp.injector.ListenerInjector;
+import com.heretere.hpwp.injector.listener.CommandPreProcessListener;
 
 @Plugin(name = "HPWP", version = "VERSION")
 @ApiVersion(ApiVersion.Target.v1_13)
@@ -69,8 +71,9 @@ import java.util.logging.Level;
     defaultValue = PermissionDefault.OP,
     children = { @ChildPermission(name = "hpwp.events"), @ChildPermission(name = "hpwp.gui") }
 )
-@SoftDependency("ProtocolLib")
 public final class PerWorldPlugins extends JavaPlugin {
+    private final int BSTATS_ID = 11794;
+
     private @Nullable GUI gui;
     private @Nullable ConfigManager configManager;
     private @Nullable ListenerInjector injector;
@@ -104,6 +107,9 @@ public final class PerWorldPlugins extends JavaPlugin {
         }
 
         this.injector.load();
+
+        Metrics metrics = new Metrics(this, BSTATS_ID);
+        metrics.addCustomChart(new SimplePie("distribution", () -> "DISTRIBUTION"));
     }
 
     @Override

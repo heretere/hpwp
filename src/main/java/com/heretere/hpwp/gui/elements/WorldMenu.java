@@ -39,11 +39,11 @@ import org.jetbrains.annotations.Nullable;
 
 import com.heretere.hpwp.PerWorldPlugins;
 import com.heretere.hpwp.config.pojos.ConfigWorld;
+import com.heretere.hpwp.gui.GUIUtils;
 import com.heretere.hpwp.gui.GuiPage;
 import com.heretere.hpwp.gui.Items;
 
 import de.themoep.inventorygui.GuiElementGroup;
-import de.themoep.inventorygui.GuiPageElement;
 import de.themoep.inventorygui.GuiStateElement;
 import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
@@ -51,7 +51,7 @@ import de.themoep.inventorygui.StaticGuiElement;
 public class WorldMenu implements GuiPage {
     private static final String[] ELEMENTS = {
         " tb r ed ",
-        "    c    ",
+        "         ",
         " ppppppp ",
         " ppppppp ",
         " ppppppp ",
@@ -218,42 +218,7 @@ public class WorldMenu implements GuiPage {
         );
 
         this.gui.addElement(this.plugins);
-
-        gui.addElement(
-            new GuiPageElement(
-                    'f',
-                    Items.PAPER.getItem(),
-                    GuiPageElement.PageAction.FIRST,
-                    "Go to first page (current: %page%)"
-            )
-        );
-
-        gui.addElement(
-            new GuiPageElement(
-                    'a',
-                    Items.SIGN.getItem(),
-                    GuiPageElement.PageAction.PREVIOUS,
-                    "Go to previous page (%prevpage%)"
-            )
-        );
-
-        gui.addElement(
-            new GuiPageElement(
-                    'n',
-                    Items.SIGN.getItem(),
-                    GuiPageElement.PageAction.NEXT,
-                    "Go to next page (%nextpage%)"
-            )
-        );
-
-        gui.addElement(
-            new GuiPageElement(
-                    'l',
-                    Items.PAPER.getItem(),
-                    GuiPageElement.PageAction.LAST,
-                    "Go to last page (%pages%)"
-            )
-        );
+        GUIUtils.attachPaginationToGUI(this.gui);
     }
 
     private void drawPlugins() {

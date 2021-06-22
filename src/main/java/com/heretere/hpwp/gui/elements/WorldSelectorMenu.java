@@ -37,15 +37,15 @@ import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.MapMaker;
 import com.heretere.hpwp.PerWorldPlugins;
+import com.heretere.hpwp.gui.GUIUtils;
 import com.heretere.hpwp.gui.GuiPage;
 import com.heretere.hpwp.gui.Items;
 
 import de.themoep.inventorygui.GuiElementGroup;
-import de.themoep.inventorygui.GuiPageElement;
 import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
 
-public class MainMenu implements GuiPage {
+public class WorldSelectorMenu implements GuiPage {
     /* Static */
 
     private static final String[] ELEMENTS = {
@@ -60,7 +60,7 @@ public class MainMenu implements GuiPage {
     private @Nullable GuiElementGroup worlds;
     private final @NotNull Map<World, WorldMenu> worldMenus;
 
-    public MainMenu() {
+    public WorldSelectorMenu() {
         this.worldMenus =
             new MapMaker()
                 .weakKeys()
@@ -90,42 +90,7 @@ public class MainMenu implements GuiPage {
         );
 
         this.gui.addElement(this.worlds);
-
-        gui.addElement(
-            new GuiPageElement(
-                    'f',
-                    Items.PAPER.getItem(),
-                    GuiPageElement.PageAction.FIRST,
-                    "Go to first page (current: %page%)"
-            )
-        );
-
-        gui.addElement(
-            new GuiPageElement(
-                    'a',
-                    Items.SIGN.getItem(),
-                    GuiPageElement.PageAction.PREVIOUS,
-                    "Go to previous page (%prevpage%)"
-            )
-        );
-
-        gui.addElement(
-            new GuiPageElement(
-                    'n',
-                    Items.SIGN.getItem(),
-                    GuiPageElement.PageAction.NEXT,
-                    "Go to next page (%nextpage%)"
-            )
-        );
-
-        gui.addElement(
-            new GuiPageElement(
-                    'l',
-                    Items.PAPER.getItem(),
-                    GuiPageElement.PageAction.LAST,
-                    "Go to last page (%pages%)"
-            )
-        );
+        GUIUtils.attachPaginationToGUI(this.gui);
     }
 
     @Override
