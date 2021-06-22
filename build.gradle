@@ -55,7 +55,7 @@ task replaceSources(type: Sync) {
     from sourceSets.main.java
     into "$buildDir/src"
     filter { line -> line.replaceAll('VERSION', version) }
-    filter { line -> line.replaceAll('DISTRIBUTION', 'spigot') }
+    filter { line -> line.replaceAll('DISTRIBUTION', 'self-compiled') }
 }
 
 compileJava {
