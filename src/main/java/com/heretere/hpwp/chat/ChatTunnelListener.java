@@ -1,13 +1,15 @@
 package com.heretere.hpwp.chat;
 
-import com.google.common.collect.ImmutableSet;
-import com.heretere.hpwp.config.ConfigManager;
-import com.heretere.hpwp.config.pojos.ConfigWorld;
-import com.heretere.hpwp.config.pojos.tunnels.ChatTunnelConfig;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+
+import com.google.common.collect.ImmutableSet;
+import com.heretere.hpwp.config.ConfigManager;
+import com.heretere.hpwp.config.pojos.ConfigWorld;
+import com.heretere.hpwp.config.pojos.tunnels.ChatTunnelConfig;
+import com.heretere.hpwp.util.ChatUtils;
 
 public class ChatTunnelListener implements Listener {
     private final ConfigManager configManager;
@@ -16,7 +18,7 @@ public class ChatTunnelListener implements Listener {
         this.configManager = configManager;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onChat(AsyncPlayerChatEvent e) {
         if (!configManager.getChatTunnelsConfig().isEnabled()) {
             return;
@@ -35,7 +37,7 @@ public class ChatTunnelListener implements Listener {
         }
 
         if (configManager.getChatTunnelsConfig().isAddFormatting()) {
-            e.setFormat("[" + chatTunnel.getName() + "] " + e.getFormat());
+            e.setFormat(ChatUtils.translate(chatTunnel.getFormat()) + e.getFormat());
         }
 
         final String baseTunnelId = world.getChatTunnelId();

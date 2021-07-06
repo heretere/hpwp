@@ -28,13 +28,13 @@ package com.heretere.hpwp.commands;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import com.heretere.hpwp.gui.GUI;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import com.heretere.hpwp.PerWorldPlugins;
+import com.heretere.hpwp.gui2.main.MainMenu;
 
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.PaperCommandManager;
@@ -62,7 +62,7 @@ public final class CommandManager {
 
         this.manager
             .getCommandContexts()
-            .registerIssuerOnlyContext(GUI.class, c -> this.parent.getGui());
+            .registerIssuerOnlyContext(MainMenu.class, c -> this.parent.getGui());
 
         this.manager
             .getCommandContexts()

@@ -38,11 +38,10 @@ import org.bukkit.event.vehicle.VehicleEvent;
 import org.bukkit.event.weather.WeatherEvent;
 import org.bukkit.event.world.WorldEvent;
 
-public final class WorldUtil {
-    private WorldUtil() {
-        throw new IllegalStateException("Utility Class.");
-    }
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
+public final class WorldUtil {
     public static Optional<World> getWorldFromEvent(final Event event) {
         final World world;
         if (event instanceof BlockEvent) {

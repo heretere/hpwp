@@ -90,10 +90,6 @@
         <!-- Checks for Javadoc comments.                     -->
         <!-- See https://checkstyle.org/config_javadoc.html -->
         <module name="InvalidJavadocPosition"/>
-        <module name="JavadocMethod"/>
-        <module name="JavadocType"/>
-        <module name="JavadocVariable"/>
-        <module name="JavadocStyle"/>
         <module name="MissingJavadocMethod"/>
         <module name="MissingJavadocType"/>
 
@@ -176,9 +172,5 @@
         <module name="FinalParameters"/>
         <module name="TodoComment"/>
         <module name="UpperEll"/>
-    </module>
-
-    <module name="SuppressionFilter">
-        <property name="file" value="${config_loc}/checkstyle-suppression.xml"/>
     </module>
 </module>

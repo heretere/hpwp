@@ -28,11 +28,10 @@ package com.heretere.hpwp.util;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
-public class ChatUtils {
-    private ChatUtils() {
-        throw new IllegalStateException("Utility Class.");
-    }
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
+public class ChatUtils {
     public static String translate(final @NotNull String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
     }

@@ -48,7 +48,7 @@ import org.jetbrains.annotations.Nullable;
 import com.heretere.hpwp.chat.ChatTunnelListener;
 import com.heretere.hpwp.commands.CommandManager;
 import com.heretere.hpwp.config.ConfigManager;
-import com.heretere.hpwp.gui.GUI;
+import com.heretere.hpwp.gui2.main.MainMenu;
 import com.heretere.hpwp.injector.ListenerInjector;
 import com.heretere.hpwp.injector.listener.CommandPreProcessListener;
 
@@ -72,29 +72,17 @@ import com.heretere.hpwp.injector.listener.CommandPreProcessListener;
     children = { @ChildPermission(name = "hpwp.events"), @ChildPermission(name = "hpwp.gui") }
 )
 public final class PerWorldPlugins extends JavaPlugin {
-    private final int BSTATS_ID = 11794;
+    private static final int BSTATS_ID = 11794;
 
-    private @Nullable GUI gui;
+    private @Nullable MainMenu gui;
     private @Nullable ConfigManager configManager;
     private @Nullable ListenerInjector injector;
 
     @Override
-    public void onLoad() {
-        this.gui = new GUI(this);
+    public void onEnable() {
         this.configManager = new ConfigManager(this);
         this.injector = new ListenerInjector(this);
-    }
-
-    @Override
-    public void onEnable() {
-        if (this.gui == null || this.configManager == null || this.injector == null) {
-            super.getLogger()
-                .severe("HPWP Failed to start correctly.");
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
-        }
-
-        this.gui.load();
+        this.gui = new MainMenu(this, this.configManager);
 
         try {
             new CommandManager(this);
@@ -121,7 +109,7 @@ public final class PerWorldPlugins extends JavaPlugin {
         this.injector.unload();
     }
 
-    public @NotNull GUI getGui() {
+    public @NotNull MainMenu getGui() {
         return Objects.requireNonNull(this.gui);
     }
 

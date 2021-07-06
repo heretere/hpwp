@@ -38,13 +38,12 @@ import org.jetbrains.annotations.NotNull;
 import com.heretere.hpwp.PerWorldPlugins;
 import com.heretere.hpwp.listener.HPWPListener;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public final class RegisteredListenerUtils {
     private static final @NotNull Field EXECUTOR_FIELD =
         FieldUtils.getField(RegisteredListener.class, "executor", true);
-
-    private RegisteredListenerUtils() {
-        throw new IllegalStateException("Utility class");
-    }
 
     public static @NotNull Optional<EventExecutor> getExecutorFromRegisteredListener(
             final @NotNull RegisteredListener listener

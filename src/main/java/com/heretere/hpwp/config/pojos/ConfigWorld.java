@@ -25,17 +25,21 @@
 
 package com.heretere.hpwp.config.pojos;
 
-import com.google.common.collect.Maps;
-import com.google.gson.annotations.SerializedName;
-import com.heretere.hch.core.annotation.Comment;
+import java.util.Collections;
+import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.Set;
+import com.google.common.collect.Maps;
+import com.google.gson.annotations.SerializedName;
+import com.heretere.hpwp.libs.hch.core.annotation.Comment;
 
+import lombok.Data;
+
+@Data
 public final class ConfigWorld {
 
     @SerializedName("check_world")
@@ -102,33 +106,5 @@ public final class ConfigWorld {
         }
 
         return this.pluginEnabled(plugin);
-    }
-
-    public String getChatTunnelId() {
-        return chatTunnelId;
-    }
-
-    public boolean isCheck() {
-        return check;
-    }
-
-    public boolean isWhitelist() {
-        return whitelist;
-    }
-
-    public void setCheck(boolean check) {
-        this.check = check;
-    }
-
-    public void setWhitelist(boolean whitelist) {
-        this.whitelist = whitelist;
-    }
-
-    public Set<String> getWhitelistedEvents() {
-        return whitelistedEvents;
-    }
-
-    public Set<String> getDisabledPlugins() {
-        return disabledPlugins;
     }
 }

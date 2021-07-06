@@ -25,18 +25,20 @@
 
 package com.heretere.hpwp.config;
 
-import com.heretere.hch.core.MultiConfigHandler;
-import com.heretere.hch.yaml.YamlParser;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+
+import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
+
 import com.heretere.hpwp.PerWorldPlugins;
 import com.heretere.hpwp.config.pojos.ConfigWorld;
 import com.heretere.hpwp.config.pojos.GlobalVariables;
 import com.heretere.hpwp.config.pojos.tunnels.ChatTunnelsConfig;
-import org.bukkit.World;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
+import com.heretere.hpwp.libs.hch.core.MultiConfigHandler;
+import com.heretere.hpwp.libs.hch.yaml.YamlParser;
+import com.heretere.hpwp.tasks.Chain;
 
 public class ConfigManager {
     private final @NotNull PerWorldPlugins parent;
@@ -71,13 +73,17 @@ public class ConfigManager {
                 return new IllegalStateException("Couldn't load chat tunnels yml.");
             });
 
-        this.configHandler.getConfigByRelativePath("global.yml")
-            .ifPresent(config -> this.configHandler.saveConfig(config, true));
-
-        this.configHandler.getConfigByRelativePath("chat_tunnels.yml")
-            .ifPresent(config -> this.configHandler.saveConfig(config, true));
-
-        this.configHandler.getErrors().forEach(Throwable::printStackTrace);
+        Chain.IO.newChain()
+            .async(
+                () -> this.configHandler.getConfigByRelativePath("global.yml")
+                    .ifPresent(config -> this.configHandler.saveConfig(config, true))
+            )
+            .async(
+                () -> this.configHandler.getConfigByRelativePath("chat_tunnels.yml")
+                    .ifPresent(config -> this.configHandler.saveConfig(config, true))
+            )
+            .sync(() -> this.configHandler.getErrors().forEach(Throwable::printStackTrace))
+            .execute();
     }
 
     public @NotNull ConfigWorld getConfigFromWorld(final @NotNull World world) {

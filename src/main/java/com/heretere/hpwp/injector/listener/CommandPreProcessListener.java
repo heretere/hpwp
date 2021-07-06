@@ -32,7 +32,6 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
@@ -47,6 +46,7 @@ import org.jetbrains.annotations.Nullable;
 import com.google.common.collect.Maps;
 import com.heretere.hpwp.PerWorldPlugins;
 import com.heretere.hpwp.config.pojos.ConfigWorld;
+import com.heretere.hpwp.util.ChatUtils;
 
 public class CommandPreProcessListener implements Listener {
     private static final Field COMMAND_MAP = FieldUtils.getField(Bukkit.getServer().getClass(), "commandMap", true);
@@ -86,7 +86,6 @@ public class CommandPreProcessListener implements Listener {
 
             if (tmpCommand == null) {
                 for (Map.Entry<String, String[]> aliasMap : Bukkit.getCommandAliases().entrySet()) {
-
                     if (
                         Arrays.stream(aliasMap.getValue())
                             .filter(index -> index.equalsIgnoreCase(commandName))
@@ -112,10 +111,7 @@ public class CommandPreProcessListener implements Listener {
             e.setCancelled(true);
             e.getPlayer()
                 .sendMessage(
-                    ChatColor.translateAlternateColorCodes(
-                        '&',
-                        this.parent.getConfigManager().getGlobalVariables().getCommandDisabledMessage()
-                    )
+                    ChatUtils.translate(this.parent.getConfigManager().getGlobalVariables().getCommandDisabledMessage())
                 );
         }
     }

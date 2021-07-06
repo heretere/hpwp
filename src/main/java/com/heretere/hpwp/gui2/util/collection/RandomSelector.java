@@ -23,30 +23,15 @@
  *
  */
 
-package com.heretere.hpwp.gui;
+package com.heretere.hpwp.gui2.util.collection;
 
-import com.heretere.hpwp.PerWorldPlugins;
-import com.heretere.hpwp.gui.elements.WorldSelectorMenu;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class GUI {
-    private final @NotNull PerWorldPlugins parent;
-    private final WorldSelectorMenu worldSelectorMenu;
+public class RandomSelector<T> extends ArrayList<T> {
 
-    public GUI(final @NotNull PerWorldPlugins parent) {
-        this.parent = parent;
-
-        this.worldSelectorMenu = new WorldSelectorMenu();
+    public T selectRandom() {
+        return super.get(ThreadLocalRandom.current().nextInt(super.size()));
     }
 
-    public void load() {
-        this.worldSelectorMenu.load(this.parent);
-    }
-
-    public void open(final @NotNull Player player) {
-        this.worldSelectorMenu.drawWorlds(this.parent);
-        this.worldSelectorMenu.getGUI().show(player);
-        this.worldSelectorMenu.getGUI().draw(player);
-    }
 }

@@ -1,12 +1,19 @@
 package com.heretere.hpwp.config.pojos.tunnels;
 
-import com.google.common.collect.Lists;
-import com.google.gson.annotations.SerializedName;
-import com.heretere.hch.core.annotation.ConfigFile;
-
 import java.util.List;
 
+import com.google.common.collect.Lists;
+import com.google.gson.annotations.SerializedName;
+import com.heretere.hpwp.libs.hch.core.annotation.ConfigFile;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @ConfigFile("chat_tunnels.yml")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChatTunnelsConfig {
     private boolean enabled = false;
 
@@ -16,32 +23,7 @@ public class ChatTunnelsConfig {
     @SerializedName("chat_tunnels")
     private List<ChatTunnelConfig> chatTunnels =
         Lists.newArrayList(
-            new ChatTunnelConfig("tunnel-1", "Tunnel 1"),
-            new ChatTunnelConfig("tunnel-2", "Tunnel 2")
+            new ChatTunnelConfig("tunnel-1", "&r&f[&bTunnel 1&r&f] "),
+            new ChatTunnelConfig("tunnel-2", "&r&f[&bTunnel 2&r&f] ")
         );
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public boolean isAddFormatting() {
-        return addFormatting;
-    }
-
-    public List<ChatTunnelConfig> getChatTunnels() {
-        return chatTunnels;
-    }
-
-    public ChatTunnelsConfig() {
-    }
-
-    public ChatTunnelsConfig(
-            boolean enabled,
-            boolean addFormatting,
-            List<ChatTunnelConfig> chatTunnels
-    ) {
-        this.enabled = enabled;
-        this.addFormatting = addFormatting;
-        this.chatTunnels = chatTunnels;
-    }
 }

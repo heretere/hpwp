@@ -25,6 +25,20 @@
 
 package com.heretere.hpwp.commands;
 
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+
+import com.google.common.collect.ImmutableSet;
+import com.heretere.hpwp.PerWorldPlugins;
+import com.heretere.hpwp.gui2.main.MainMenu;
+
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.CommandAlias;
@@ -34,18 +48,6 @@ import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.HelpCommand;
 import co.aikar.commands.annotation.Subcommand;
 import co.aikar.commands.annotation.Syntax;
-import com.google.common.collect.ImmutableSet;
-import com.heretere.hpwp.PerWorldPlugins;
-import com.heretere.hpwp.gui.GUI;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @CommandAlias("hpwp|pwp")
 public final class HPWPCommands extends BaseCommand {
@@ -85,7 +87,7 @@ public final class HPWPCommands extends BaseCommand {
     @CommandPermission("hpwp.gui")
     @Syntax("")
     @Description("Configure HPWP through the GUI")
-    public static void onShowGUI(GUI gui, Player sender) {
+    public static void onShowGUI(MainMenu gui, Player sender) {
         gui.open(sender);
     }
 }
