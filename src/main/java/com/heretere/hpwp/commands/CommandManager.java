@@ -34,7 +34,7 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import com.heretere.hpwp.PerWorldPlugins;
-import com.heretere.hpwp.gui2.main.MainMenu;
+import com.heretere.hpwp.gui.main.MainMenu;
 
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.PaperCommandManager;

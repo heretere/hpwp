@@ -23,7 +23,7 @@
  *
  */
 
-package com.heretere.hpwp.gui2.util.collection;
+package com.heretere.hpwp.gui.util.collection;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;

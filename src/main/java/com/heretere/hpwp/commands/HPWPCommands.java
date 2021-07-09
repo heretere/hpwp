@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.google.common.collect.ImmutableSet;
 import com.heretere.hpwp.PerWorldPlugins;
-import com.heretere.hpwp.gui2.main.MainMenu;
+import com.heretere.hpwp.gui.main.MainMenu;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;

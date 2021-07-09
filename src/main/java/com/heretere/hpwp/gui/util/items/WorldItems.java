@@ -1,11 +1,11 @@
-package com.heretere.hpwp.gui2.util.items;
+package com.heretere.hpwp.gui.util.items;
 
 import java.util.Arrays;
 
 import org.bukkit.World;
 
 import com.cryptomorin.xseries.XMaterial;
-import com.heretere.hpwp.gui2.util.collection.RandomSelector;
+import com.heretere.hpwp.gui.util.collection.RandomSelector;
 
 public enum WorldItems {
     OVERWORLD(

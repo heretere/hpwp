@@ -1,4 +1,4 @@
-package com.heretere.hpwp.gui2.main.worlds;
+package com.heretere.hpwp.gui.main.worlds;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -12,10 +12,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.cryptomorin.xseries.XMaterial;
 import com.heretere.hpwp.config.pojos.ConfigWorld;
 import com.heretere.hpwp.config.pojos.tunnels.ChatTunnelsConfig;
-import com.heretere.hpwp.gui2.ConfigGui;
-import com.heretere.hpwp.gui2.util.items.Item;
-import com.heretere.hpwp.gui2.util.items.ItemFactory;
-import com.heretere.hpwp.gui2.util.items.Texture;
+import com.heretere.hpwp.gui.ConfigGui;
+import com.heretere.hpwp.gui.util.items.Item;
+import com.heretere.hpwp.gui.util.items.ItemFactory;
+import com.heretere.hpwp.gui.util.items.Texture;
 import com.heretere.hpwp.libs.hch.core.MultiConfigHandler;
 
 import de.themoep.inventorygui.DynamicGuiElement;

@@ -1,4 +1,4 @@
-package com.heretere.hpwp.gui2.main.worlds;
+package com.heretere.hpwp.gui.main.worlds;
 
 import java.util.Comparator;
 
@@ -8,10 +8,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.heretere.hpwp.config.ConfigManager;
-import com.heretere.hpwp.gui2.ConfigGui;
-import com.heretere.hpwp.gui2.main.MainMenu;
-import com.heretere.hpwp.gui2.util.items.Item;
-import com.heretere.hpwp.gui2.util.items.WorldItems;
+import com.heretere.hpwp.gui.ConfigGui;
+import com.heretere.hpwp.gui.main.MainMenu;
+import com.heretere.hpwp.gui.util.items.Item;
+import com.heretere.hpwp.gui.util.items.WorldItems;
 import com.heretere.hpwp.libs.hch.core.MultiConfigHandler;
 
 import de.themoep.inventorygui.GuiElementGroup;

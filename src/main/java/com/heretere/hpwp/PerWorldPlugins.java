@@ -48,7 +48,7 @@ import org.jetbrains.annotations.Nullable;
 import com.heretere.hpwp.chat.ChatTunnelListener;
 import com.heretere.hpwp.commands.CommandManager;
 import com.heretere.hpwp.config.ConfigManager;
-import com.heretere.hpwp.gui2.main.MainMenu;
+import com.heretere.hpwp.gui.main.MainMenu;
 import com.heretere.hpwp.injector.ListenerInjector;
 import com.heretere.hpwp.injector.listener.CommandPreProcessListener;
 
