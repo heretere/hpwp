@@ -1,5 +1,5 @@
 /*
- * Project hpwp, 2021-07-09T7:41-0400
+ * Project hpwp, 2021-07-13T19:01-0400
  *
  * Copyright 2021 Justin Heflin
  *
@@ -14,6 +14,7 @@ package com.heretere.hpwp.config.pojos;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.google.gson.annotations.SerializedName;
 import com.heretere.hpwp.libs.hch.core.annotation.Comment;
 import com.heretere.hpwp.libs.hch.core.annotation.ConfigFile;
 
@@ -24,5 +25,14 @@ import lombok.Data;
 public class GlobalVariables {
     @Comment("The message that is sent when someone tries to execute a disabled command.")
     @Comment("Use the '&' symbol for color codes.")
+    @SerializedName(value = "command_disabled_message", alternate = { "commandDisabledMessage" })
     private @NotNull String commandDisabledMessage = "&cSorry, that command is disabled.";
+
+    @Comment("Receive update notifications. Message is sent to all people with hpwp.notify permission.")
+    @SerializedName("update_notification")
+    private boolean updateNotification = true;
+
+    @Comment("Use d (day), h(hour), s(second) to change update checking interval.")
+    @SerializedName("update_notification_interval")
+    private @NotNull String updateNotificationInterval = "4h 0m 0s";
 }

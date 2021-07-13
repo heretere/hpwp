@@ -1,5 +1,5 @@
 /*
- * Project hpwp, 2021-07-09T7:41-0400
+ * Project hpwp, 2021-07-13T19:01-0400
  *
  * Copyright 2021 Justin Heflin
  *
@@ -38,6 +38,7 @@ import com.heretere.hpwp.config.ConfigManager;
 import com.heretere.hpwp.gui.main.MainMenu;
 import com.heretere.hpwp.injector.ListenerInjector;
 import com.heretere.hpwp.injector.listener.CommandPreProcessListener;
+import com.heretere.hpwp.update.UpdaterRunnable;
 
 @Plugin(name = "HPWP", version = "VERSION")
 @ApiVersion(ApiVersion.Target.v1_13)
@@ -47,6 +48,7 @@ import com.heretere.hpwp.injector.listener.CommandPreProcessListener;
 @LoadOrder(PluginLoadOrder.STARTUP)
 @Permission(name = "hpwp.events", desc = "Allows /pwp events", defaultValue = PermissionDefault.OP)
 @Permission(name = "hpwp.gui", desc = "Allows use of /pwp gui", defaultValue = PermissionDefault.OP)
+@Permission(name = "hpwp.notify", desc = "Receive update notifications", defaultValue = PermissionDefault.OP)
 @Permission(
     name = "hpwp.chat.bypass",
     desc = "See all chat tunnels no matter what",
@@ -56,7 +58,10 @@ import com.heretere.hpwp.injector.listener.CommandPreProcessListener;
     name = "hpwp.*",
     desc = "Wildcard hpwp permission",
     defaultValue = PermissionDefault.OP,
-    children = { @ChildPermission(name = "hpwp.events"), @ChildPermission(name = "hpwp.gui") }
+    children = {
+        @ChildPermission(name = "hpwp.events"),
+        @ChildPermission(name = "hpwp.gui"),
+        @ChildPermission(name = "hpwp.notify") }
 )
 public final class PerWorldPlugins extends JavaPlugin {
     private static final int BSTATS_ID = 11794;
@@ -85,6 +90,8 @@ public final class PerWorldPlugins extends JavaPlugin {
 
         Metrics metrics = new Metrics(this, BSTATS_ID);
         metrics.addCustomChart(new SimplePie("distribution", () -> "DISTRIBUTION"));
+
+        new UpdaterRunnable(this, this.configManager.getGlobalVariables()).load();
     }
 
     @Override

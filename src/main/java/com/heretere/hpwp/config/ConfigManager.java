@@ -1,5 +1,5 @@
 /*
- * Project hpwp, 2021-07-09T7:41-0400
+ * Project hpwp, 2021-07-13T19:01-0400
  *
  * Copyright 2021 Justin Heflin
  *
@@ -38,7 +38,7 @@ public class ConfigManager {
         this.parent = parent;
         this.configHandler = new MultiConfigHandler(parent.getDataFolder().toPath());
 
-        this.configHandler.registerFileExtensionHandler(new YamlParser(this.configHandler), "yml");
+        this.configHandler.registerFileExtensionHandler(new YamlParser(this.configHandler), "yml", "yaml");
 
         Map<Class<?>, Object> typeAdapters = new HashMap<>();
 
@@ -50,14 +50,14 @@ public class ConfigManager {
             .orElseThrow(() -> {
                 this.configHandler.getErrors()
                     .forEach(error -> this.parent.getLogger().log(Level.SEVERE, error.getMessage(), error));
-                return new IllegalStateException("Couldn't load global yml.");
+                return new IllegalStateException("Couldn't load global.yml.");
             });
 
         this.chatTunnelsConfig = this.configHandler.loadPOJOClass(ChatTunnelsConfig.class)
             .orElseThrow(() -> {
                 this.configHandler.getErrors()
                     .forEach(error -> this.parent.getLogger().log(Level.SEVERE, error.getMessage(), error));
-                return new IllegalStateException("Couldn't load chat tunnels yml.");
+                return new IllegalStateException("Couldn't load chat_tunnels.yml.");
             });
 
         Chain.IO.newChain()
