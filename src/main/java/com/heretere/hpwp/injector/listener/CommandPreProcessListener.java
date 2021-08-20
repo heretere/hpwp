@@ -67,6 +67,10 @@ public class CommandPreProcessListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onCommandPreProcess(final @NotNull PlayerCommandPreprocessEvent e) {
+        if (e.getPlayer().hasPermission("hpwp.bypass.commands")) {
+            return;
+        }
+
         final ConfigWorld configWorld = this.parent.getConfigManager().getConfigFromWorld(e.getPlayer().getWorld());
 
         if (!configWorld.getCheck()) {

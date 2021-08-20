@@ -39,7 +39,7 @@ public class ChatTunnelListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChat(AsyncPlayerChatEvent e) {
-        if (!configManager.getChatTunnelsConfig().isEnabled()) {
+        if (e.getPlayer().hasPermission("hpwp.bypass.chat") || !configManager.getChatTunnelsConfig().isEnabled()) {
             return;
         }
 

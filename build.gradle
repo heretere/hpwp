@@ -31,7 +31,7 @@ repositories {
 
 allprojects {
     group 'com.heretere'
-    version '1.4.3'
+    version '1.4.4'
     description "Activate plugins in specific worlds."
 }
 
@@ -39,14 +39,14 @@ dependencies {
     annotationProcessor 'org.spigotmc:plugin-annotations:1.2.3-SNAPSHOT'
     compileOnly 'org.spigotmc:plugin-annotations:1.2.3-SNAPSHOT'
 
-    compileOnlyApi 'org.jetbrains:annotations:21.0.1'
+    compileOnlyApi 'org.jetbrains:annotations:22.0.0'
     compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
 
     implementation 'org.bstats:bstats-bukkit:2.2.1'
 
     implementation 'de.themoep:inventorygui:1.5-SNAPSHOT'
 
-    implementation 'com.github.cryptomorin:XSeries:8.2.0'
+    implementation 'com.github.cryptomorin:XSeries:8.3.0'
 
     implementation 'net.wesjd:anvilgui:1.5.1-SNAPSHOT'
 
@@ -62,7 +62,7 @@ task replaceSources(type: Sync) {
     from sourceSets.main.java
     into "$buildDir/src"
     filter { line -> line.replaceAll('VERSION', version) }
-    filter { line -> line.replaceAll('DISTRIBUTION', 'self-compiled.') }
+    filter { line -> line.replaceAll('DISTRIBUTION', 'spigot') }
 }
 
 compileJava {

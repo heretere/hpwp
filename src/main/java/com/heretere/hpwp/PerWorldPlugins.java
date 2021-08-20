@@ -57,8 +57,13 @@ import com.heretere.hpwp.update.UpdaterRunnable;
 @Permission(name = "hpwp.gui", desc = "Allows use of /pwp gui", defaultValue = PermissionDefault.OP)
 @Permission(name = "hpwp.notify", desc = "Receive update notifications", defaultValue = PermissionDefault.OP)
 @Permission(
-    name = "hpwp.chat.bypass",
-    desc = "See all chat tunnels no matter what",
+    name = "hpwp.bypass.chat",
+    desc = "Send and see all chat tunnels",
+    defaultValue = PermissionDefault.FALSE
+)
+@Permission(
+    name = "hpwp.bypass.commands",
+    desc = "Execute all commands even for disabled plugins",
     defaultValue = PermissionDefault.FALSE
 )
 @Permission(
@@ -69,6 +74,15 @@ import com.heretere.hpwp.update.UpdaterRunnable;
         @ChildPermission(name = "hpwp.events"),
         @ChildPermission(name = "hpwp.gui"),
         @ChildPermission(name = "hpwp.notify") }
+)
+@Permission(
+    name = "hpwp.bypass.*",
+    desc = "Wildcard hpwp bypass permission",
+    defaultValue = PermissionDefault.FALSE,
+    children = {
+        @ChildPermission(name = "hpwp.bypass.commands"),
+        @ChildPermission(name = "hpwp.bypass.chat")
+    }
 )
 public final class PerWorldPlugins extends JavaPlugin {
     private static final int BSTATS_ID = 11794;
