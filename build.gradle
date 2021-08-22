@@ -27,6 +27,7 @@ repositories {
     maven { url 'https://repo.aikar.co/content/groups/aikar/' }
     maven { url 'https://repo.minebench.de/' }
     maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url 'https://repo.codemc.io/repository/maven-snapshots/' }
 }
 
 allprojects {
@@ -42,13 +43,11 @@ dependencies {
     compileOnlyApi 'org.jetbrains:annotations:22.0.0'
     compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
 
-    implementation 'org.bstats:bstats-bukkit:2.2.1'
-
     implementation 'de.themoep:inventorygui:1.5-SNAPSHOT'
 
     implementation 'com.github.cryptomorin:XSeries:8.3.0'
 
-    implementation 'net.wesjd:anvilgui:1.5.1-SNAPSHOT'
+    implementation 'net.wesjd:anvilgui:1.5.3-SNAPSHOT'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -80,6 +79,5 @@ shadowJar {
     relocate 'co.aikar.taskchain', 'com.heretere.hpwp.libs.taskchain'
     relocate 'co.aikar.commands', 'com.heretere.hpwp.libs.acf'
     relocate 'co.aikar.locales', 'com.heretere.hpwp.libs.acf.locales'
-    relocate 'org.bstats', 'com.heretere.hpwp.libs.bstats'
     minimize()
 }

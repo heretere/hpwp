@@ -22,8 +22,6 @@ package com.heretere.hpwp;
 import java.util.Objects;
 import java.util.logging.Level;
 
-import org.bstats.bukkit.Metrics;
-import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginLoadOrder;
@@ -85,8 +83,6 @@ import com.heretere.hpwp.update.UpdaterRunnable;
     }
 )
 public final class PerWorldPlugins extends JavaPlugin {
-    private static final int BSTATS_ID = 11794;
-
     private @Nullable MainMenu gui;
     private @Nullable ConfigManager configManager;
     private @Nullable ListenerInjector injector;
@@ -108,9 +104,6 @@ public final class PerWorldPlugins extends JavaPlugin {
         }
 
         this.injector.load();
-
-        Metrics metrics = new Metrics(this, BSTATS_ID);
-        metrics.addCustomChart(new SimplePie("distribution", () -> "DISTRIBUTION"));
 
         new UpdaterRunnable(this, this.configManager.getGlobalVariables()).load();
     }
