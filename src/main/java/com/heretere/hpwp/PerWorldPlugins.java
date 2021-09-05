@@ -22,12 +22,14 @@ package com.heretere.hpwp;
 import java.util.Objects;
 import java.util.logging.Level;
 
+import com.heretere.hpwp.hooks.ChatTunnelExpansion;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginLoadOrder;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.annotation.dependency.SoftDependency;
 import org.bukkit.plugin.java.annotation.permission.ChildPermission;
 import org.bukkit.plugin.java.annotation.permission.Permission;
 import org.bukkit.plugin.java.annotation.plugin.ApiVersion;
@@ -53,6 +55,7 @@ import com.heretere.hpwp.update.UpdaterRunnable;
 @Author("Heretere")
 @Website("heretere.com")
 @LoadOrder(PluginLoadOrder.STARTUP)
+@SoftDependency("PlaceholderAPI")
 @Permission(name = "hpwp.events", desc = "Allows /pwp events", defaultValue = PermissionDefault.OP)
 @Permission(name = "hpwp.gui", desc = "Allows use of /pwp gui", defaultValue = PermissionDefault.OP)
 @Permission(name = "hpwp.notify", desc = "Receive update notifications", defaultValue = PermissionDefault.OP)
@@ -108,6 +111,10 @@ public final class PerWorldPlugins extends JavaPlugin {
         }
 
         this.injector.load();
+
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new ChatTunnelExpansion(this.configManager).register();
+        }
 
         Metrics metrics = new Metrics(this, BSTATS_ID);
         metrics.addCustomChart(new SimplePie("distribution", () -> "DISTRIBUTION"));
