@@ -28,11 +28,12 @@ repositories {
     maven { url 'https://repo.minebench.de/' }
     maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
     maven { url 'https://repo.codemc.io/repository/maven-snapshots/' }
+    maven { url 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
 }
 
 allprojects {
     group 'com.heretere'
-    version '1.4.4'
+    version '1.4.5'
     description "Activate plugins in specific worlds."
 }
 
@@ -42,6 +43,8 @@ dependencies {
 
     compileOnlyApi 'org.jetbrains:annotations:22.0.0'
     compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
+
+    compileOnlyApi 'me.clip:placeholderapi:2.10.10'
 
     implementation 'de.themoep:inventorygui:1.5-SNAPSHOT'
 
