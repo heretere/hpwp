@@ -77,6 +77,11 @@ import com.heretere.hpwp.update.UpdaterRunnable;
         @ChildPermission(name = "hpwp.notify") }
 )
 @Permission(
+    name = "hpwp.toggle.chat",
+    desc = "Enables the ability to run /pwp togglechat",
+    defaultValue = PermissionDefault.OP
+)
+@Permission(
     name = "hpwp.bypass.*",
     desc = "Wildcard hpwp bypass permission",
     defaultValue = PermissionDefault.FALSE,

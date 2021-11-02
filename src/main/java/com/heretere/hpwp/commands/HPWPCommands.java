@@ -19,13 +19,17 @@
 
 package com.heretere.hpwp.commands;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.WeakHashMap;
 import java.util.stream.Collectors;
 
+import com.heretere.hpwp.util.ChatUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,8 +49,10 @@ import co.aikar.commands.annotation.Syntax;
 
 @CommandAlias("hpwp|pwp")
 public final class HPWPCommands extends BaseCommand {
+    private final Map<Player, PermissionAttachment> chatToggle = new WeakHashMap<>();
+
     @HelpCommand
-    public static void onHelper(
+    public void onHelper(
             final @NotNull CommandHelp helper
     ) {
         helper.showHelp();
@@ -57,7 +63,7 @@ public final class HPWPCommands extends BaseCommand {
     @Syntax("[plugin_name]")
     @CommandCompletion("@plugins")
     @Description("Lists all the events that have been ran by the specified plugin.")
-    public static void onShowEvents(
+    public void onShowEvents(
             final @NotNull PerWorldPlugins parent,
             final @NotNull CommandSender sender,
             final @NotNull Plugin plugin
@@ -81,7 +87,32 @@ public final class HPWPCommands extends BaseCommand {
     @CommandPermission("hpwp.gui")
     @Syntax("")
     @Description("Configure HPWP through the GUI")
-    public static void onShowGUI(MainMenu gui, Player sender) {
+    public void onShowGUI(MainMenu gui, Player sender) {
         gui.open(sender);
+    }
+
+    @Subcommand("toggleChat")
+    @CommandPermission("hpwp.toggle.chat")
+    @Syntax("")
+    @Description("Toggle global chat")
+    public void onToggleChat(
+            final @NotNull PerWorldPlugins parent,
+            final @NotNull Player player
+    ) {
+        PermissionAttachment attachment = this.chatToggle.get(player);
+
+        if (attachment == null) {
+            attachment = player.addAttachment(parent);
+        }
+
+        final boolean enabled = !player.hasPermission("hpwp.bypass.chat");
+
+        attachment.setPermission("hpwp.bypass.chat", enabled);
+
+        this.chatToggle.put(player, attachment);
+
+        final String message = enabled ? "&aEnabled global chat" : "&cDisabled global chat";
+
+        player.sendMessage(ChatUtils.translate(message));
     }
 }
