@@ -15,10 +15,10 @@ plugins {
     id 'io.beekeeper.gradle.plugins.formatter' version '0.9.20'
     id 'io.beekeeper.gradle.plugins.ide' version '0.9.20'
     /* General */
-    id 'com.github.johnrengelman.shadow' version '7.1.0'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'java-library'
     id 'io.freefair.lombok' version '6.3.0'
-    id 'com.github.ben-manes.versions' version '0.39.0'
+    id "com.github.ben-manes.versions" version "0.42.0"
 }
 
 repositories {
@@ -32,7 +32,7 @@ repositories {
 
 allprojects {
     group 'com.heretere'
-    version '1.5.3'
+    version '1.5.4'
     description "Activate plugins in specific worlds."
 }
 
@@ -43,13 +43,13 @@ dependencies {
     compileOnlyApi 'org.jetbrains:annotations:23.0.0'
     compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
 
-    compileOnlyApi 'me.clip:placeholderapi:2.10.10'
+    compileOnlyApi 'me.clip:placeholderapi:2.11.1'
 
-    implementation 'org.bstats:bstats-bukkit:2.2.1'
+    implementation 'org.bstats:bstats-bukkit:3.0.0'
 
     implementation 'de.themoep:inventorygui:1.5-SNAPSHOT'
 
-    implementation 'com.github.cryptomorin:XSeries:8.5.0.1'
+    implementation 'com.github.cryptomorin:XSeries:8.6.1'
 
     implementation 'net.wesjd:anvilgui:1.5.3-SNAPSHOT'
 
@@ -57,7 +57,7 @@ dependencies {
 
     /* ACF */
     implementation 'co.aikar:taskchain-bukkit:3.7.2'
-    implementation 'co.aikar:acf-paper:0.5.0-SNAPSHOT'
+    implementation 'co.aikar:acf-paper:0.5.1-SNAPSHOT'
 }
 
 task replaceSources(type: Sync) {
@@ -65,7 +65,7 @@ task replaceSources(type: Sync) {
     from sourceSets.main.java
     into "$buildDir/src"
     filter { line -> line.replaceAll('VERSION', version) }
-    filter { line -> line.replaceAll('DISTRIBUTION', 'self-compiled') }
+    filter { line -> line.replaceAll('DISTRIBUTION', 'spigot') }
 }
 
 compileJava {
@@ -86,5 +86,3 @@ shadowJar {
     relocate 'org.bstats', 'com.heretere.hpwp.libs.bstats'
     minimize()
 }
-
-project.tasks.jar.finalizedBy project.tasks.shadowJar
