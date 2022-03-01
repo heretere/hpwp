@@ -63,11 +63,6 @@ import com.heretere.hpwp.update.UpdaterRunnable;
     defaultValue = PermissionDefault.FALSE
 )
 @Permission(
-    name = "hpwp.bypass.commands",
-    desc = "Execute all commands even for disabled plugins",
-    defaultValue = PermissionDefault.FALSE
-)
-@Permission(
     name = "hpwp.*",
     desc = "Wildcard hpwp permission",
     defaultValue = PermissionDefault.OP,
@@ -86,7 +81,6 @@ import com.heretere.hpwp.update.UpdaterRunnable;
     desc = "Wildcard hpwp bypass permission",
     defaultValue = PermissionDefault.FALSE,
     children = {
-        @ChildPermission(name = "hpwp.bypass.commands"),
         @ChildPermission(name = "hpwp.bypass.chat")
     }
 )
