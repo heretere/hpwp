@@ -22,7 +22,9 @@ package com.heretere.hpwp.injector.listener;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 
+import com.heretere.hpwp.util.FieldFinder;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.bukkit.Bukkit;
@@ -34,6 +36,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -95,18 +98,27 @@ public class CommandPreProcessListener implements Listener {
             return tmpCommand == null ? CommandPreProcessListener.EMPTY_COMMAND : tmpCommand;
         });
 
-        if (!(command instanceof PluginIdentifiableCommand)) {
-            return;
+        Optional<Plugin> pluginOptional;
+
+        if (command instanceof PluginIdentifiableCommand) {
+            final PluginIdentifiableCommand pluginCommand = (PluginIdentifiableCommand) command;
+            pluginOptional = Optional.ofNullable(pluginCommand.getPlugin());
+        } else {
+            pluginOptional = FieldFinder.findPlugin(command);
         }
 
-        final PluginIdentifiableCommand pluginCommand = (PluginIdentifiableCommand) command;
-
-        if (!configWorld.commandEnabledForPlugin(pluginCommand.getPlugin())) {
-            e.setCancelled(true);
-            e.getPlayer()
-                .sendMessage(
-                    ChatUtils.translate(this.parent.getConfigManager().getGlobalVariables().getCommandDisabledMessage())
-                );
-        }
+        pluginOptional.ifPresent(plugin -> {
+            if (!configWorld.commandEnabledForPlugin(plugin)) {
+                e.setCancelled(true);
+                e.getPlayer()
+                    .sendMessage(
+                        ChatUtils.translate(
+                            this.parent.getConfigManager()
+                                .getGlobalVariables()
+                                .getCommandDisabledMessage()
+                        )
+                    );
+            }
+        });
     }
 }
