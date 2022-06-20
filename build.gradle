@@ -27,12 +27,17 @@ repositories {
     maven { url 'https://repo.minebench.de/' }
     maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
     maven { url 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
-    maven { url 'https://repo.codemc.io/repository/maven-snapshots/' }
+    maven {
+        url 'https://repo.codemc.io/repository/maven-snapshots/'
+        content {
+            includeGroupByRegex 'net\\.wesjd.*'
+        }
+    }
 }
 
 allprojects {
     group 'com.heretere'
-    version '1.5.8'
+    version '1.6.0'
     description "Activate plugins in specific worlds."
 }
 
@@ -47,11 +52,11 @@ dependencies {
 
     implementation 'org.bstats:bstats-bukkit:3.0.0'
 
-    implementation 'de.themoep:inventorygui:1.5-SNAPSHOT'
+    implementation 'com.github.cryptomorin:XSeries:8.8.0'
 
-    implementation 'com.github.cryptomorin:XSeries:8.7.1'
+    implementation 'de.themoep:inventorygui:1.+'
 
-    implementation 'net.wesjd:anvilgui:1.5.3-SNAPSHOT'
+    implementation 'net.wesjd:anvilgui:1.+'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -84,5 +89,5 @@ shadowJar {
     relocate 'co.aikar.commands', 'com.heretere.hpwp.libs.acf'
     relocate 'co.aikar.locales', 'com.heretere.hpwp.libs.acf.locales'
     relocate 'org.bstats', 'com.heretere.hpwp.libs.bstats'
-    minimize()
+    relocate 'net.wesjd.anvilgui', 'com.heretere.hpwp.libs.anvilgui'
 }
