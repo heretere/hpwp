@@ -11,13 +11,10 @@
  */
 
 plugins {
-    /* Beekeeper */
-    id 'io.beekeeper.gradle.plugins.formatter' version '0.9.20'
-    id 'io.beekeeper.gradle.plugins.ide' version '0.9.20'
     /* General */
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'java-library'
-    id 'io.freefair.lombok' version '6.4.3'
+    id 'io.freefair.lombok' version '6.5.0.3'
     id "com.github.ben-manes.versions" version "0.42.0"
 }
 
@@ -37,7 +34,7 @@ repositories {
 
 allprojects {
     group 'com.heretere'
-    version '1.6.1'
+    version '1.6.2'
     description "Activate plugins in specific worlds."
 }
 
@@ -74,7 +71,6 @@ task replaceSources(type: Sync) {
 }
 
 compileJava {
-    dependsOn spotlessApply
     source = replaceSources.outputs
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
