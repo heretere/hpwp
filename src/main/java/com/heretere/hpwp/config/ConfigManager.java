@@ -112,11 +112,11 @@ public class ConfigManager {
         return this.globalVariables;
     }
 
-    public MultiConfigHandler getConfigHandler() {
+    public @NotNull MultiConfigHandler getConfigHandler() {
         return configHandler;
     }
 
-    public ChatTunnelsConfig getChatTunnelsConfig() {
+    public @NotNull ChatTunnelsConfig getChatTunnelsConfig() {
         return chatTunnelsConfig;
     }
 }

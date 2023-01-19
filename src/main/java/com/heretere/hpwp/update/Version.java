@@ -19,6 +19,8 @@
 
 package com.heretere.hpwp.update;
 
+import org.jetbrains.annotations.Nullable;
+
 public class Version implements Comparable<Version> {
 
     private final String version;
@@ -36,7 +38,7 @@ public class Version implements Comparable<Version> {
     }
 
     @Override
-    public int compareTo(Version that) {
+    public int compareTo(@Nullable Version that) {
         if (that == null)
             return 1;
         String[] thisParts = this.get().split("\\.");

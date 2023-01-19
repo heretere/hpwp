@@ -21,6 +21,7 @@ package com.heretere.hpwp.gui.main.global;
 
 import static com.heretere.hpwp.util.ChatUtils.translate;
 
+import com.google.common.collect.Lists;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -59,10 +60,10 @@ public final class GlobalConfigGui extends ConfigGui {
 
         this.textInput = super.createAnvilGui(
             builder -> builder.title(translate("&r&0Disabled Message"))
-                .onComplete((player, text) -> {
-                    globalVariables.setCommandDisabledMessage(text);
+                .onComplete((completion) -> {
+                    globalVariables.setCommandDisabledMessage(completion.getText());
                     super.save();
-                    return AnvilGUI.Response.close();
+                    return Lists.newArrayList(AnvilGUI.ResponseAction.close());
                 })
         );
 

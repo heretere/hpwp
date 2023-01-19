@@ -14,7 +14,7 @@ plugins {
     /* General */
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'java-library'
-    id 'io.freefair.lombok' version '6.6'
+    id 'io.freefair.lombok' version '6.6.1'
     id "com.github.ben-manes.versions" version "0.44.0"
 }
 
@@ -35,7 +35,7 @@ repositories {
 
 allprojects {
     group 'com.heretere'
-    version '1.6.4'
+    version '1.6.5'
     description "Activate plugins in specific worlds."
 }
 
@@ -43,7 +43,7 @@ dependencies {
     annotationProcessor 'org.spigotmc:plugin-annotations:1.2.3-SNAPSHOT'
     compileOnly 'org.spigotmc:plugin-annotations:1.2.3-SNAPSHOT'
 
-    compileOnlyApi 'org.jetbrains:annotations:23.1.0'
+    compileOnlyApi 'org.jetbrains:annotations:24.0.0'
     compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
 
     compileOnlyApi 'me.clip:placeholderapi:2.11.2'
@@ -54,7 +54,7 @@ dependencies {
 
     implementation 'de.themoep:inventorygui:1.+'
 
-    implementation 'net.wesjd:anvilgui:1.5.+'
+    implementation 'net.wesjd:anvilgui:1.6.+'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -87,4 +87,7 @@ shadowJar {
     relocate 'co.aikar.locales', 'com.heretere.hpwp.libs.acf.locales'
     relocate 'org.bstats', 'com.heretere.hpwp.libs.bstats'
     relocate 'net.wesjd.anvilgui', 'com.heretere.hpwp.libs.anvilgui'
+    minimize {
+        exclude(dependency('net.wesjd:anvilgui:.*'))
+    }
 }

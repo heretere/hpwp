@@ -21,6 +21,7 @@ package com.heretere.hpwp.gui.main.tunnels;
 
 import static com.heretere.hpwp.util.ChatUtils.translate;
 
+import com.google.common.collect.Lists;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -58,19 +59,19 @@ public class ChatTunnelConfigGui extends ConfigGui {
 
         AnvilGUI.Builder tunnelIdText = super.createAnvilGui(
             builder -> builder.title(translate("&r&0Tunnel Id"))
-                .onComplete((player, text) -> {
-                    chatTunnelConfig.setId(text);
+                .onComplete((completion) -> {
+                    chatTunnelConfig.setId(completion.getText());
                     super.save();
-                    return AnvilGUI.Response.close();
+                    return Lists.newArrayList(AnvilGUI.ResponseAction.close());
                 })
         );
 
         AnvilGUI.Builder formattedNameText = super.createAnvilGui(
             builder -> builder.title(translate("&r&0Formatted Name"))
-                .onComplete((player, text) -> {
-                    chatTunnelConfig.setFormat(text);
+                .onComplete((completion) -> {
+                    chatTunnelConfig.setFormat(completion.getText());
                     super.save();
-                    return AnvilGUI.Response.close();
+                    return Lists.newArrayList(AnvilGUI.ResponseAction.close());
                 })
         );
 
