@@ -59,19 +59,27 @@ public class ChatTunnelConfigGui extends ConfigGui {
 
         AnvilGUI.Builder tunnelIdText = super.createAnvilGui(
             builder -> builder.title(translate("&r&0Tunnel Id"))
-                .onComplete((completion) -> {
-                    chatTunnelConfig.setId(completion.getText());
-                    super.save();
-                    return Lists.newArrayList(AnvilGUI.ResponseAction.close());
+                .onClick((slot, state) -> {
+                    if (slot == AnvilGUI.Slot.OUTPUT) {
+                        chatTunnelConfig.setId(state.getText());
+                        super.save();
+                        return Lists.newArrayList(AnvilGUI.ResponseAction.close());
+                    }
+
+                    return Lists.newArrayList();
                 })
         );
 
         AnvilGUI.Builder formattedNameText = super.createAnvilGui(
             builder -> builder.title(translate("&r&0Formatted Name"))
-                .onComplete((completion) -> {
-                    chatTunnelConfig.setFormat(completion.getText());
-                    super.save();
-                    return Lists.newArrayList(AnvilGUI.ResponseAction.close());
+                .onClick((slot, state) -> {
+                    if (slot == AnvilGUI.Slot.OUTPUT) {
+                        chatTunnelConfig.setFormat(state.getText());
+                        super.save();
+                        return Lists.newArrayList(AnvilGUI.ResponseAction.close());
+                    }
+
+                    return Lists.newArrayList();
                 })
         );
 

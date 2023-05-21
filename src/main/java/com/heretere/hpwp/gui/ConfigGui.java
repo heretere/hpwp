@@ -120,7 +120,7 @@ public abstract class ConfigGui {
                         .build()
                         .create()
                 )
-                .onClose(this::open)
+                .onClose((state) -> this.open(state.getPlayer()))
         );
     }
 

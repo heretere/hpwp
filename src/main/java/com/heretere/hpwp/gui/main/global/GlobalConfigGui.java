@@ -60,10 +60,14 @@ public final class GlobalConfigGui extends ConfigGui {
 
         this.textInput = super.createAnvilGui(
             builder -> builder.title(translate("&r&0Disabled Message"))
-                .onComplete((completion) -> {
-                    globalVariables.setCommandDisabledMessage(completion.getText());
-                    super.save();
-                    return Lists.newArrayList(AnvilGUI.ResponseAction.close());
+                .onClick((slot, state) -> {
+                    if (slot == AnvilGUI.Slot.OUTPUT) {
+                        globalVariables.setCommandDisabledMessage(state.getText());
+                        super.save();
+                        return Lists.newArrayList(AnvilGUI.ResponseAction.close());
+                    }
+
+                    return Lists.newArrayList();
                 })
         );
 

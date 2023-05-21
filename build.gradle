@@ -12,9 +12,9 @@
 
 plugins {
     /* General */
-    id 'com.github.johnrengelman.shadow' version '8.1.0'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'java-library'
-    id 'io.freefair.lombok' version '8.0.0-rc2'
+    id 'io.freefair.lombok' version '8.0.1'
     id "com.github.ben-manes.versions" version "0.46.0"
 }
 
@@ -35,7 +35,7 @@ repositories {
 
 allprojects {
     group 'com.heretere'
-    version '1.6.6'
+    version '1.6.7'
     description "Activate plugins in specific worlds."
 }
 
@@ -46,11 +46,11 @@ dependencies {
     compileOnlyApi 'org.jetbrains:annotations:24.0.1'
     compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
 
-    compileOnlyApi 'me.clip:placeholderapi:2.11.2'
+    compileOnlyApi 'me.clip:placeholderapi:2.11.3'
 
-    implementation 'org.bstats:bstats-bukkit:3.0.1'
+    implementation 'org.bstats:bstats-bukkit:3.0.2'
 
-    implementation 'com.github.cryptomorin:XSeries:9.3.0'
+    implementation 'com.github.cryptomorin:XSeries:9.3.1'
 
     implementation 'de.themoep:inventorygui:1.+'
 
@@ -60,7 +60,7 @@ dependencies {
 
     /* ACF */
     implementation 'co.aikar:taskchain-bukkit:3.7.2'
-    implementation 'co.aikar:acf-paper:0.5.1-SNAPSHOT'
+    implementation 'co.aikar:acf-paper:0.5.+'
 }
 
 task replaceSources(type: Sync) {
