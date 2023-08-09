@@ -14,7 +14,7 @@ plugins {
     /* General */
     id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'java-library'
-    id 'io.freefair.lombok' version '8.0.1'
+    id 'io.freefair.lombok' version '8.1.0'
     id "com.github.ben-manes.versions" version "0.47.0"
 }
 
@@ -35,7 +35,7 @@ repositories {
 
 allprojects {
     group 'com.heretere'
-    version '1.7.0'
+    version '1.7.1'
     description "Activate plugins in specific worlds."
 }
 
@@ -50,11 +50,11 @@ dependencies {
 
     implementation 'org.bstats:bstats-bukkit:3.0.2'
 
-    implementation 'com.github.cryptomorin:XSeries:9.4.0'
+    implementation 'com.github.cryptomorin:XSeries:9.5.0'
 
     implementation 'de.themoep:inventorygui:1.+'
 
-    implementation 'net.wesjd:anvilgui:1.6.+'
+    implementation 'net.wesjd:anvilgui:1.7.+'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -66,7 +66,7 @@ dependencies {
 task replaceSources(type: Sync) {
     inputs.property 'version', version
     from sourceSets.main.java
-    into "$buildDir/src"
+    into layout.getBuildDirectory().get().dir('src')
     filter { line -> line.replaceAll('VERSION', version) }
     filter { line -> line.replaceAll('DISTRIBUTION', 'self-compiled') }
 }
