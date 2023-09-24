@@ -35,7 +35,7 @@ repositories {
 
 allprojects {
     group 'com.heretere'
-    version '1.7.1'
+    version '1.7.2'
     description "Activate plugins in specific worlds."
 }
 
@@ -46,21 +46,21 @@ dependencies {
     compileOnlyApi 'org.jetbrains:annotations:24.0.1'
     compileOnly 'org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT'
 
-    compileOnlyApi 'me.clip:placeholderapi:2.11.3'
+    compileOnlyApi 'me.clip:placeholderapi:2.11.4'
 
     implementation 'org.bstats:bstats-bukkit:3.0.2'
 
     implementation 'com.github.cryptomorin:XSeries:9.5.0'
 
-    implementation 'de.themoep:inventorygui:1.+'
+    implementation 'de.themoep:inventorygui:1.6.1-SNAPSHOT'
 
-    implementation 'net.wesjd:anvilgui:1.7.+'
+    implementation 'net.wesjd:anvilgui:1.9.0-SNAPSHOT'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     /* ACF */
     implementation 'co.aikar:taskchain-bukkit:3.7.2'
-    implementation 'co.aikar:acf-paper:0.5.+'
+    implementation 'co.aikar:acf-paper:0.5.1-SNAPSHOT'
 }
 
 task replaceSources(type: Sync) {
