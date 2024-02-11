@@ -15,7 +15,7 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'java-library'
     id 'io.freefair.lombok' version '8.4'
-    id "com.github.ben-manes.versions" version "0.50.0"
+    id "com.github.ben-manes.versions" version "0.51.0"
 }
 
 repositories {
@@ -35,7 +35,7 @@ repositories {
 
 allprojects {
     group 'com.heretere'
-    version '1.7.5'
+    version '1.7.6'
     description "Activate plugins in specific worlds."
 }
 
@@ -50,7 +50,7 @@ dependencies {
 
     implementation 'org.bstats:bstats-bukkit:3.0.2'
 
-    implementation 'com.github.cryptomorin:XSeries:9.8.0'
+    implementation 'com.github.cryptomorin:XSeries:9.9.0'
 
     implementation 'de.themoep:inventorygui:1.6.1-SNAPSHOT'
 
