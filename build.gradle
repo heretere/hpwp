@@ -10,11 +10,26 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+buildscript {
+    ext {
+        asmAsmVersion = "9.6" // https://gitlab.ow2.org/asm/asm/-/tags
+    }
+    configurations {
+        classpath {
+            resolutionStrategy {
+                //in order to handle jackson's higher release version in shadow, this needs to be upgraded to latest.
+                force(group: "org.ow2.asm", name: "asm", version: asmAsmVersion)
+                force(group: "org.ow2.asm", name: "asm-commons", version: asmAsmVersion)
+            }
+        }
+    }
+}
+
 plugins {
     /* General */
     id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'java-library'
-    id 'io.freefair.lombok' version '8.4'
+    id 'io.freefair.lombok' version '8.6'
     id "com.github.ben-manes.versions" version "0.51.0"
 }
 
@@ -35,7 +50,7 @@ repositories {
 
 allprojects {
     group 'com.heretere'
-    version '1.7.6'
+    version '1.7.7'
     description "Activate plugins in specific worlds."
 }
 
@@ -44,17 +59,17 @@ dependencies {
     compileOnly 'org.spigotmc:plugin-annotations:1.2.3-SNAPSHOT'
 
     compileOnlyApi 'org.jetbrains:annotations:24.1.0'
-    compileOnly 'org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.20-R0.1-SNAPSHOT'
 
-    compileOnlyApi 'me.clip:placeholderapi:2.11.5'
+    compileOnlyApi 'me.clip:placeholderapi:2.11.6'
 
     implementation 'org.bstats:bstats-bukkit:3.0.2'
 
-    implementation 'com.github.cryptomorin:XSeries:9.9.0'
+    implementation 'com.github.cryptomorin:XSeries:11.2.0'
 
-    implementation 'de.themoep:inventorygui:1.6.1-SNAPSHOT'
+    implementation 'de.themoep:inventorygui:1.6.2-SNAPSHOT'
 
-    implementation 'net.wesjd:anvilgui:1.9.2-SNAPSHOT'
+    implementation 'net.wesjd:anvilgui:1.10.0-SNAPSHOT'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -73,8 +88,8 @@ task replaceSources(type: Sync) {
 
 compileJava {
     source = replaceSources.outputs
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 shadowJar {
@@ -91,3 +106,6 @@ shadowJar {
         exclude(dependency('net.wesjd:anvilgui:.*'))
     }
 }
+
+dependencyUpdates.gradleReleaseChannel = "current";
+dependencyUpdates.revision = "integration"
