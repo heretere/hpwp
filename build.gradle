@@ -29,8 +29,8 @@ plugins {
     /* General */
     id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'java-library'
-    id 'io.freefair.lombok' version '8.11'
-    id "com.github.ben-manes.versions" version "0.51.0"
+    id 'io.freefair.lombok' version '8.13.1'
+    id "com.github.ben-manes.versions" version "0.52.0"
 }
 
 repositories {
@@ -50,7 +50,7 @@ repositories {
 
 allprojects {
     group 'com.heretere'
-    version '1.7.9'
+    version '1.7.10'
     description "Activate plugins in specific worlds."
 }
 
@@ -58,18 +58,18 @@ dependencies {
     annotationProcessor 'org.spigotmc:plugin-annotations:1.2.3-SNAPSHOT'
     compileOnly 'org.spigotmc:plugin-annotations:1.2.3-SNAPSHOT'
 
-    compileOnlyApi 'org.jetbrains:annotations:26.0.1'
+    compileOnlyApi 'org.jetbrains:annotations:26.0.2'
     compileOnly 'org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT'
 
     compileOnlyApi 'me.clip:placeholderapi:2.11.6'
 
     implementation 'org.bstats:bstats-bukkit:3.1.0'
 
-    implementation 'com.github.cryptomorin:XSeries:12.1.0'
+    implementation 'com.github.cryptomorin:XSeries:13.2.0'
 
-    implementation 'de.themoep:inventorygui:1.6.4-SNAPSHOT'
+    implementation 'de.themoep:inventorygui:1.6.5-SNAPSHOT'
 
-    implementation 'net.wesjd:anvilgui:1.10.4-SNAPSHOT'
+    implementation 'net.wesjd:anvilgui:1.10.5-SNAPSHOT'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
