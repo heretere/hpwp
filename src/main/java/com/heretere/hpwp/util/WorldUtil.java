@@ -19,8 +19,6 @@
 
 package com.heretere.hpwp.util;
 
-import java.util.Optional;
-
 import org.bukkit.World;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockEvent;
@@ -31,13 +29,32 @@ import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.vehicle.VehicleEvent;
 import org.bukkit.event.weather.WeatherEvent;
 import org.bukkit.event.world.WorldEvent;
-
 import lombok.experimental.UtilityClass;
+
+import java.lang.reflect.Method;
+import java.util.Optional;
 
 @UtilityClass
 public final class WorldUtil {
+
+    private static Method inventoryView_getPlayerMethod;
+    private static Method humanEntity_getWorldMethod;
+    private static boolean reflectionInitialized = false;
+
+    static {
+        try {
+            Class<?> inventoryViewClass = Class.forName("org.bukkit.inventory.InventoryView");
+            inventoryView_getPlayerMethod = inventoryViewClass.getMethod("getPlayer");
+
+            Class<?> humanEntityClass = Class.forName("org.bukkit.entity.HumanEntity");
+            humanEntity_getWorldMethod = humanEntityClass.getMethod("getWorld");
+
+            reflectionInitialized = true;
+        } catch (ClassNotFoundException | NoSuchMethodException ignored) {}
+    }
+
     public static Optional<World> getWorldFromEvent(final Event event) {
-        final World world;
+        World world = null;
         if (event instanceof BlockEvent) {
             final BlockEvent blockEvent = (BlockEvent) event;
             world = blockEvent.getBlock().getWorld();
@@ -46,7 +63,17 @@ public final class WorldUtil {
             world = playerEvent.getPlayer().getWorld();
         } else if (event instanceof InventoryEvent) {
             final InventoryEvent inventoryEvent = (InventoryEvent) event;
-            world = inventoryEvent.getView().getPlayer().getWorld();
+            if (reflectionInitialized) {
+                try {
+                    Object inventoryViewObject = inventoryEvent.getView();
+                    Object playerObject = inventoryView_getPlayerMethod.invoke(inventoryViewObject);
+
+                    if (playerObject != null) {
+                        world = (World) humanEntity_getWorldMethod.invoke(playerObject);
+                    }
+                } catch (Exception ignored) {
+                }
+            }
         } else if (event instanceof EntityEvent) {
             final EntityEvent entityEvent = (EntityEvent) event;
             world = entityEvent.getEntity().getWorld();
@@ -62,8 +89,6 @@ public final class WorldUtil {
         } else if (event instanceof WorldEvent) {
             final WorldEvent worldEvent = (WorldEvent) event;
             world = worldEvent.getWorld();
-        } else {
-            world = null;
         }
 
         return Optional.ofNullable(world);

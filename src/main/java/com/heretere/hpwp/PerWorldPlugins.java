@@ -50,7 +50,7 @@ import com.heretere.hpwp.injector.listener.CommandPreProcessListener;
 import com.heretere.hpwp.update.UpdaterRunnable;
 
 @Plugin(name = "HPWP", version = "VERSION")
-@ApiVersion(ApiVersion.Target.v1_13)
+@ApiVersion("1.13")
 @LogPrefix("HPWP")
 @Author("Heretere")
 @Website("heretere.com")

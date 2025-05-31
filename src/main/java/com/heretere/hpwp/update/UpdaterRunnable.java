@@ -107,7 +107,7 @@ public class UpdaterRunnable extends BukkitRunnable {
                         connection.getResponseCode() == HttpURLConnection.HTTP_ACCEPTED
                             || connection.getResponseCode() == HttpURLConnection.HTTP_OK
                     ) {
-                        output = new JsonParser().parse(new InputStreamReader(connection.getInputStream()))
+                        output = JsonParser.parseReader(new InputStreamReader(connection.getInputStream()))
                             .getAsJsonObject()
                             .get("name")
                             .getAsString();
