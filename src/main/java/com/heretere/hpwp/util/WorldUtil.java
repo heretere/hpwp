@@ -19,7 +19,9 @@
 
 package com.heretere.hpwp.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
+import java.util.logging.Level;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.entity.EntityEvent;
@@ -31,66 +33,109 @@ import org.bukkit.event.weather.WeatherEvent;
 import org.bukkit.event.world.WorldEvent;
 import lombok.experimental.UtilityClass;
 
-import java.lang.reflect.Method;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.util.Optional;
 
 @UtilityClass
 public final class WorldUtil {
 
-    private static Method inventoryView_getPlayerMethod;
-    private static Method humanEntity_getWorldMethod;
+    private static MethodHandle inventoryViewGetPlayerHandle;
+    private static MethodHandle humanEntityGetWorldHandle;
     private static boolean reflectionInitialized = false;
 
-    static {
-        try {
-            Class<?> inventoryViewClass = Class.forName("org.bukkit.inventory.InventoryView");
-            inventoryView_getPlayerMethod = inventoryViewClass.getMethod("getPlayer");
+    private static synchronized void ensureReflectionInitialized() {
+        if (reflectionInitialized) {
+            return;
+        }
 
+        try {
+            MethodHandles.Lookup lookup = MethodHandles.publicLookup();
+
+            Class<?> inventoryViewClass = Class.forName("org.bukkit.inventory.InventoryView");
             Class<?> humanEntityClass = Class.forName("org.bukkit.entity.HumanEntity");
-            humanEntity_getWorldMethod = humanEntityClass.getMethod("getWorld");
+
+            inventoryViewGetPlayerHandle = lookup.findVirtual(
+                inventoryViewClass,
+                "getPlayer",
+                MethodType.methodType(humanEntityClass)
+            );
+
+            humanEntityGetWorldHandle = lookup.findVirtual(
+                humanEntityClass,
+                "getWorld",
+                MethodType.methodType(World.class)
+            );
 
             reflectionInitialized = true;
-        } catch (ClassNotFoundException | NoSuchMethodException ignored) {}
+        } catch (Throwable e) {
+            Bukkit.getLogger().log(Level.FINE, "WorldUtil: inventory-based world resolution unavailable on this server implementation", e);
+        }
     }
 
     public static Optional<World> getWorldFromEvent(final Event event) {
-        World world = null;
         if (event instanceof BlockEvent) {
-            final BlockEvent blockEvent = (BlockEvent) event;
-            world = blockEvent.getBlock().getWorld();
-        } else if (event instanceof PlayerEvent) {
-            final PlayerEvent playerEvent = (PlayerEvent) event;
-            world = playerEvent.getPlayer().getWorld();
-        } else if (event instanceof InventoryEvent) {
-            final InventoryEvent inventoryEvent = (InventoryEvent) event;
-            if (reflectionInitialized) {
-                try {
-                    Object inventoryViewObject = inventoryEvent.getView();
-                    Object playerObject = inventoryView_getPlayerMethod.invoke(inventoryViewObject);
-
-                    if (playerObject != null) {
-                        world = (World) humanEntity_getWorldMethod.invoke(playerObject);
-                    }
-                } catch (Exception ignored) {
-                }
-            }
-        } else if (event instanceof EntityEvent) {
-            final EntityEvent entityEvent = (EntityEvent) event;
-            world = entityEvent.getEntity().getWorld();
-        } else if (event instanceof HangingEvent) {
-            final HangingEvent hangingEvent = (HangingEvent) event;
-            world = hangingEvent.getEntity().getWorld();
-        } else if (event instanceof VehicleEvent) {
-            final VehicleEvent vehicleEvent = (VehicleEvent) event;
-            world = vehicleEvent.getVehicle().getWorld();
-        } else if (event instanceof WeatherEvent) {
-            final WeatherEvent weatherEvent = (WeatherEvent) event;
-            world = weatherEvent.getWorld();
-        } else if (event instanceof WorldEvent) {
-            final WorldEvent worldEvent = (WorldEvent) event;
-            world = worldEvent.getWorld();
+            return Optional.of(((BlockEvent) event).getBlock().getWorld());
         }
 
-        return Optional.ofNullable(world);
+        if (event instanceof PlayerEvent) {
+            return Optional.of(((PlayerEvent) event).getPlayer().getWorld());
+        }
+
+        if (event instanceof InventoryEvent) {
+            return fromInventoryEvent((InventoryEvent) event);
+        }
+
+        if (event instanceof EntityEvent) {
+            return Optional.of(((EntityEvent) event).getEntity().getWorld());
+        }
+
+        if (event instanceof HangingEvent) {
+            return Optional.of(((HangingEvent) event).getEntity().getWorld());
+        }
+
+        if (event instanceof VehicleEvent) {
+            return Optional.of(((VehicleEvent) event).getVehicle().getWorld());
+        }
+
+        if (event instanceof WeatherEvent) {
+            return Optional.of(((WeatherEvent) event).getWorld());
+        }
+
+        if (event instanceof WorldEvent) {
+            return Optional.of(((WorldEvent) event).getWorld());
+        }
+
+        return Optional.empty();
+    }
+
+    private static Optional<World> fromInventoryEvent(final InventoryEvent inventoryEvent) {
+        try {
+            ensureReflectionInitialized();
+
+            if (!reflectionInitialized) {
+                return Optional.empty();
+            }
+
+            Object inventoryViewObject = inventoryEvent.getView();
+            if (inventoryViewObject == null) {
+                return Optional.empty();
+            }
+
+            Object playerObject = inventoryViewGetPlayerHandle.invoke(inventoryViewObject);
+            if (playerObject == null) {
+                return Optional.empty();
+            }
+
+            Object worldObject = humanEntityGetWorldHandle.invoke(playerObject);
+            if (worldObject instanceof World) {
+                return Optional.of((World) worldObject);
+            }
+        } catch (Throwable e) {
+            Bukkit.getLogger().log(Level.FINE, "WorldUtil: failed to resolve world from InventoryEvent", e);
+        }
+
+        return Optional.empty();
     }
 }
